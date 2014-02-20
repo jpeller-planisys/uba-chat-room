@@ -41,11 +41,9 @@
 	</script>
 </head>
 
-<body onload="initializeLoginPage();">
-	<div id="loginContent">
-		<div id="loginHeadlineContainer">
-			<h1>[LANG]title[/LANG]</h1>
-		</div>
+<body onload="initializeLoginPage();" class="ajax-chat">
+	<div id="content">
+		<h1 id="loginHeadlineContainer">[LANG]title[/LANG]</h1>
 		<form id="loginForm" action="[LOGIN_URL/]" method="post" enctype="application/x-www-form-urlencoded">
 			<div id="loginFormContainer">
 				<input type="hidden" name="login" id="loginField" value="login"/>

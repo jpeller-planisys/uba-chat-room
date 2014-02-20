@@ -7,30 +7,23 @@
  * @link https://blueimp.net/ajax/
  */
 
+body.ajax-chat { 
+	border: 0;
+	margin: 0;
+}
+
 /* Positioning */
-body.ajax-chat {
-	padding:0;
-	margin:0;
-}
 #loginContent {
-	position:absolute;
-	width:100%;
-	height:100%;
+	min-width: 290px;
+	max-width: 700px;
+	padding: 15px;
+	margin: 0 auto;
 }
-#loginContent #loginHeadlineContainer {
-	margin: 100px 100px 0 100px;
-}
-#loginContent #loginFormContainer, #loginContent #errorContainer {
-	margin: 0 100px;
-}
-#loginContent #loginFormContainer div {
+#loginFormContainer div {
 	margin-bottom:7px;
 }
-#loginContent #loginRegisteredUsers {
+#loggedOut #loginRegisteredUsers {
     padding-top:5px;
-}
-#loginContent #copyright {
-	margin: 20px 100px 0 100px;
 }
 #content {
 	position:absolute;
@@ -122,6 +115,7 @@ body.ajax-chat {
 	left:20px;
 	bottom:57px;
 	padding:3px;
+	z-index:1;
 }
 #content #optionsContainer {
 	position:absolute;
@@ -143,8 +137,8 @@ body.ajax-chat {
     vertical-align:middle;
 }
 #content #optionsContainer input.button {
-    width:22px;
-	height:22px;
+    width:20px;
+	height:20px;
 }
 #content #emoticonsContainer a {
 	margin-left:1px;
@@ -183,7 +177,6 @@ body.ajax-chat {
 	height:40px;
 }
 #content #onlineListContainer h3, #content #helpContainer h3, #content #settingsContainer h3 {
-	height:30px;
 	padding: 4px 10px;
 	margin:0px;
 	text-align:center;
@@ -275,4 +268,36 @@ body.ajax-chat {
 /* Misc */
 #content #bbCodeContainer input, #content #optionsContainer input.button, #content #settingsContainer #settingsList input.button, #content #logoutButton, #content #submitButton, #loginContent #loginButton {
 	cursor:pointer;
+}
+
+@media (max-width: 700px) {
+	#content #headline { left: 5px; margin: 0; padding: 0; }
+	#content #statusIconContainer { top: 5px; right: 5px;  }
+	#content #copyright { top: 10px; right: 40px; }
+	#content #logoutChannelContainer { top: 30px; left: 5px; }
+	#content #logoutChannelContainer label { display: none; }
+	#content #emoticonsContainer { display: none; }
+	#content #bbCodeContainer { bottom: 45px; left: 5px; }
+	#content #optionsContainer { bottom: 10px; right: 5px; }
+	#content #onlineListContainer { width: 135px; right: 5px; bottom: 115px; }
+	#content #chatList { left: 5px; right: 150px; bottom: 115px; font-size: 12px; }
+	#content #submitButtonContainer  { display: none; }
+	#content #inputFieldContainer #inputField { height: 20px; }
+	#content #inputFieldContainer { left: 5px; right: 5px; bottom: 80px; }
+	#content #colorCodesContainer { bottom:85px; left: 5px; }
+}
+
+@media (max-width: 480px) {
+	#content #chatList { left: 0px; border-left: 0; right: 135px; border-right: 0; }
+	#content #onlineListContainer { border-right: 0; right: 0px; }
+	#content #bbCodeContainer input, #content #logoutButton, #content #submitButton, #loginContent #loginButton { padding: 4px; display: block; float: left; margin-right: 1px;}
+	#content #bbCodeContainer { padding: 0; }
+}
+
+@media (max-height: 300px) {
+	#content #bbCodeContainer, #content #optionsContainer { display: none; }
+	#content #inputFieldContainer #inputField { height: 20px; }
+	#content #inputFieldContainer { bottom: 5px; }
+	#content #chatList, #content #onlineListContainer, #content #settingsContainer { bottom: 35px; top: 45px; }
+	#content #logoutChannelContainer { display: none; }
 }

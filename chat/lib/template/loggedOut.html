@@ -36,9 +36,8 @@
 </head>
 <body class="ajax-chat" onload="initializeLoginPage();">
 	<div id="loginContent">
-		<div id="loginHeadlineContainer">
-			<h1>[LANG]title[/LANG]</h1>
-		</div>
+		<h1 id="loginHeadline">[LANG]title[/LANG]</h1>
+		<div id="errorContainer">[ERROR_MESSAGES/]<noscript><div>[LANG]requiresJavaScript[/LANG]</div></noscript></div>
 		<form id="loginForm" action="[LOGIN_URL/]" method="post" enctype="application/x-www-form-urlencoded">
 			<div id="loginFormContainer">
 				<input type="hidden" name="login" id="loginField" value="login"/>
@@ -55,7 +54,6 @@
 				<div id="loginRegisteredUsers">* [LANG]registeredUsers[/LANG]</div>
 			</div>
 		</form>
-		<div id="errorContainer">[ERROR_MESSAGES/]<noscript><div>[LANG]requiresJavaScript[/LANG]</div></noscript></div>
 		<!--
 			Please retain the full copyright notice below including the link to blueimp.net.
 			This not only gives respect to the amount of time given freely by the developer
