@@ -55,8 +55,19 @@ class AJAXChatTemplate {
 		$this->_parsedContent = preg_replace_callback($this->_regExpTemplateTags, array($this, 'replaceTemplateTags'), $this->_parsedContent);
 	}
 
+	function recursiveTemplate($template_file)
+	{
+		$recursive = new AJAXChatTemplate($this->ajaxChat, "sub-tpls/{$template_file}.html");
+		return $recursive->getParsedContent();
+	}
+
 	function replaceTemplateTags($tagData) {
 		switch($tagData[1]) {
+			case 'OMIT':
+				return "";
+			break;
+			case 'TEMPLATE':
+				return $this->recursiveTemplate($tagData[2]);
 			case 'AJAX_CHAT_URL':
 				return $this->ajaxChat->htmlEncode($this->ajaxChat->getChatURL());
 
