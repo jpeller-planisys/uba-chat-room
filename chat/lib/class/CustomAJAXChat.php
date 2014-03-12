@@ -43,7 +43,7 @@ class CustomAJAXChat extends AJAXChat {
 				//die();
 
 				$id = 0;
-				foreach($onlineUsers as $onlineUser)
+				foreach($onlineUsersData as $onlineUser)
 				{
 					if($userName == $onlineUser["userName"]) return null;
 					$id++;
@@ -54,6 +54,9 @@ class CustomAJAXChat extends AJAXChat {
 				$userData['userID'] = $id;
 				$userData['userName'] = $this->trimUserName($userName);
 				$userData['userRole'] = AJAX_CHAT_USER;
+				$userData['channels'] = array_values($this->getAllChannels());
+				//print_r($userData);
+				//die();
 				return $userData;
 		}
 
@@ -104,7 +107,8 @@ class CustomAJAXChat extends AJAXChat {
 			if($this->getUserRole() == AJAX_CHAT_GUEST) {
 				$validChannels = $customUsers[0]['channels'];
 			} else {
-				$validChannels = $customUsers[$this->getUserID()]['channels'];
+				//$validChannels = $customUsers[$this->getUserID()]['channels'];
+				$validChannels = array(0,1,2);
 			}
 			
 			// Add the valid channels to the channel list (the defaultChannelID is always valid):

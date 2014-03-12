@@ -21,7 +21,7 @@ $users[0]['channels'] = array(0);
 $users[1] = array();
 $users[1]['userRole'] = AJAX_CHAT_ADMIN;
 $users[1]['userName'] = 'admin';
-$users[1]['password'] = 'admin';
+$users[1]['password'] = 'admin_pass';
 $users[1]['channels'] = array(0,1);
 
 // Sample moderator user:
@@ -37,4 +37,6 @@ $users[3]['userRole'] = AJAX_CHAT_USER;
 $users[3]['userName'] = 'user';
 $users[3]['password'] = 'user';
 $users[3]['channels'] = array(0,1);
+
+
 ?>
