@@ -1,5 +1,14 @@
+Chatroom for a social network experiment @ UBA
+==============================================
+
+
+Forked from here:
+
+A fully customizable web chat implemented in JavaScript, PHP and MySQL which integrates nicely with common forum systems like phpBB, MyBB, PunBB, SMF and vBulletin. A Flash and Ruby based socket connection can be used to boost performance. http://frug.github.io/AJAX-Chat/
+
+
 AJAX Chat Standalone
-====================
+--------------------
 
 This is the standalone version of Blueimp's AJAX Chat. If you are looking for a version to integrate with your forum, select a different branch.
 
