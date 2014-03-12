@@ -57,7 +57,7 @@ var ajaxChatLang = {
 	userMenuIgnore: 'Ignorar/Aceptar',
 	userMenuIgnoreList: 'Mostrar usuarios ignorados',
 	userMenuWhereis: 'Mostrar canal',
-	userMenuKick: 'Patada/Ban',
+	userMenuKick: 'Bannear',
 	userMenuBans: 'Mostrar usuarios baneados',
 	userMenuWhois: 'Mostrar la IP',
 	unbanUser: 'Quitar el ban al usuario %s',

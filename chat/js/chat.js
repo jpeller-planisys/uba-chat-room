@@ -1099,11 +1099,11 @@ var ajaxChat = {
 					+ ' \');">'
 					+ this.lang['userMenuSendPrivateMessage']
 					+ '</a></li>'
-					+ '<li><a href="javascript:ajaxChat.insertMessageWrapper(\'/describe '
-					+ encodedUserName
-					+ ' \');">'
-					+ this.lang['userMenuDescribe']
-					+ '</a></li>'
+//					+ '<li><a href="javascript:ajaxChat.insertMessageWrapper(\'/describe '
+//					+ encodedUserName
+//					+ ' \');">'
+//					+ this.lang['userMenuDescribe']
+//					+ '</a></li>'
 					+ '<li><a href="javascript:ajaxChat.sendMessageWrapper(\'/query '
 					+ encodedUserName
 					+ '\');">'
