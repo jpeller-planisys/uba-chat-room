@@ -1147,27 +1147,28 @@ var ajaxChat = {
 						+ '</a></li>';
 			}
 		} else {
-			menu 	= '<li><a href="javascript:ajaxChat.sendMessageWrapper(\'/quit\');">'
-					+ this.lang['userMenuLogout']
-					+ '</a></li>'
-					+ '<li><a href="javascript:ajaxChat.sendMessageWrapper(\'/who\');">'
-					+ this.lang['userMenuWho']
-					+ '</a></li>'
-					+ '<li><a href="javascript:ajaxChat.sendMessageWrapper(\'/ignore\');">'
-					+ this.lang['userMenuIgnoreList']
-					+ '</a></li>'
-					+ '<li><a href="javascript:ajaxChat.sendMessageWrapper(\'/list\');">'
-					+ this.lang['userMenuList']
-					+ '</a></li>'
-					+ '<li><a href="javascript:ajaxChat.insertMessageWrapper(\'/action \');">'
-					+ this.lang['userMenuAction']
-					+ '</a></li>'
-					+ '<li><a href="javascript:ajaxChat.insertMessageWrapper(\'/roll \');">'
-					+ this.lang['userMenuRoll']
-					+ '</a></li>'
-					+ '<li><a href="javascript:ajaxChat.insertMessageWrapper(\'/nick \');">'
-					+ this.lang['userMenuNick']
-					+ '</a></li>';
+			menu 	= '';
+//					'<li><a href="javascript:ajaxChat.sendMessageWrapper(\'/quit\');">'
+//					+ this.lang['userMenuLogout']
+//					+ '</a></li>'
+//					+ '<li><a href="javascript:ajaxChat.sendMessageWrapper(\'/who\');">'
+//					+ this.lang['userMenuWho']
+//					+ '</a></li>'
+//					+ '<li><a href="javascript:ajaxChat.sendMessageWrapper(\'/ignore\');">'
+//					+ this.lang['userMenuIgnoreList']
+//					+ '</a></li>'
+//					+ '<li><a href="javascript:ajaxChat.sendMessageWrapper(\'/list\');">'
+//					+ this.lang['userMenuList']
+//					+ '</a></li>'
+//					+ '<li><a href="javascript:ajaxChat.insertMessageWrapper(\'/action \');">'
+//					+ this.lang['userMenuAction']
+//					+ '</a></li>'
+//					+ '<li><a href="javascript:ajaxChat.insertMessageWrapper(\'/roll \');">'
+//					+ this.lang['userMenuRoll']
+//					+ '</a></li>'
+//					+ '<li><a href="javascript:ajaxChat.insertMessageWrapper(\'/nick \');">'
+//					+ this.lang['userMenuNick']
+//					+ '</a></li>';
 			if(this.userRole === '1' || this.userRole === '2' || this.userRole === '3') {
 				menu	+= '<li><a href="javascript:ajaxChat.sendMessageWrapper(\'/join\');">'
 						+ this.lang['userMenuEnterPrivateRoom']
