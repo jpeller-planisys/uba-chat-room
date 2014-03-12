@@ -9,7 +9,7 @@
  */
 
 $lang = array();
-$lang['title'] = 'AJAX Chat';
+$lang['title'] = 'Chat-room @ UBA';
 $lang['userName'] = 'Usuario';
 $lang['password'] = 'Contraseña';
 $lang['login'] = 'Conectar';
