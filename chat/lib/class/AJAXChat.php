@@ -79,6 +79,8 @@ class AJAXChat {
 		$this->_requestVars['getInfos']		= isset($_REQUEST['getInfos'])		? $_REQUEST['getInfos']			: null;
 		$this->_requestVars['lang']			= isset($_REQUEST['lang'])			? $_REQUEST['lang']				: null;
 		$this->_requestVars['delete']		= isset($_REQUEST['delete'])		? (int)$_REQUEST['delete']		: null;
+		//Ask for password on login
+		$this->_requestVars['pass']			= isset($_REQUEST['pass'])			? true							: false;
 		
 		// Initialize custom request variables:
 		$this->initCustomRequestVars();
@@ -262,7 +264,9 @@ class AJAXChat {
 			}
 			// Send chat messages and online user list in XML format:
 			$this->sendXMLMessages();
-		} else {
+		} else if ($this->getRequestVar('pass')) {
+			$this->sendXHTMLContent($pass = true);
+		}else{
 			// Display XHTML content for non-ajax requests:
 			$this->sendXHTMLContent();
 		}
@@ -308,10 +312,11 @@ class AJAXChat {
 		}
 	}
 
-	function sendXHTMLContent() {
+	function sendXHTMLContent($pass = false) {
+
 		$httpHeader = new AJAXChatHTTPHeader($this->getConfig('contentEncoding'), $this->getConfig('contentType'));
 
-		$template = new AJAXChatTemplate($this, $this->getTemplateFileName(), $httpHeader->getContentType());
+		$template = new AJAXChatTemplate($this, $this->getTemplateFileName($pass), $httpHeader->getContentType());
 
 		// Send HTTP header:
 		$httpHeader->send();		
@@ -320,14 +325,17 @@ class AJAXChat {
 		echo $template->getParsedContent();
 	}
 
-	function getTemplateFileName() {
+	function getTemplateFileName($pass= false) {
 		switch($this->getView()) {
 			case 'chat':
 				return AJAX_CHAT_PATH.'lib/template/loggedIn.html';
 			case 'logs':
 				return AJAX_CHAT_PATH.'lib/template/logs.html';
 			default:
-				return AJAX_CHAT_PATH.'lib/template/loggedOut.html';
+				if($pass)
+					return AJAX_CHAT_PATH.'lib/template/loggedOutPass.html';
+				else
+					return AJAX_CHAT_PATH.'lib/template/loggedOut.html';
 		}
 	}
 

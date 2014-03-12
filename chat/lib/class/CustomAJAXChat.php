@@ -12,6 +12,57 @@ class CustomAJAXChat extends AJAXChat {
 	// Returns an associative array containing userName, userID and userRole
 	// Returns null if login is invalid
 	function getValidLoginUserData() {
+		$customUsers = $this->getCustomUsers();
+		
+		if($this->getRequestVar('password')) {
+			// Check if we have a valid registered user:
+
+			$userName = $this->getRequestVar('userName');
+			$userName = $this->convertEncoding($userName, $this->getConfig('contentEncoding'), $this->getConfig('sourceEncoding'));
+
+			$password = $this->getRequestVar('password');
+			$password = $this->convertEncoding($password, $this->getConfig('contentEncoding'), $this->getConfig('sourceEncoding'));
+
+			foreach($customUsers as $key=>$value) {
+				if(($value['userName'] == $userName) && ($value['password'] == $password)) {
+					$userData = array();
+					$userData['userID'] = $key;
+					$userData['userName'] = $this->trimUserName($value['userName']);
+					$userData['userRole'] = $value['userRole'];
+					return $userData;
+				}
+			}
+			
+			return null;
+		} else {
+				$userName = $this->getRequestVar('userName');
+				$userName = $this->convertEncoding($userName, $this->getConfig('contentEncoding'), $this->getConfig('sourceEncoding'));
+
+				$onlineUsersData = $this->getOnlineUsersData();
+				//print_r($onlineUsersData);
+				//die();
+
+				$id = 0;
+				foreach($onlineUsers as $onlineUser)
+				{
+					if($userName == $onlineUser["userName"]) return null;
+					$id++;
+				}
+					
+				
+				$userData = array();
+				$userData['userID'] = $id;
+				$userData['userName'] = $this->trimUserName($userName);
+				$userData['userRole'] = AJAX_CHAT_USER;
+				return $userData;
+		}
+
+	
+	}
+
+	// Returns an associative array containing userName, userID and userRole
+	// Returns null if login is invalid
+	function getValidLoginUserDataOld() {
 		
 		$customUsers = $this->getCustomUsers();
 		
