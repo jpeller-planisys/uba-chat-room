@@ -8,7 +8,8 @@
  */
 
 // Suppress errors.
-error_reporting(0);
+error_reporting(E_ALL);
+
 
 // Path to the chat directory:
 define('AJAX_CHAT_PATH', dirname($_SERVER['SCRIPT_FILENAME']).'/');
