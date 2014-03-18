@@ -8,7 +8,9 @@
  */
 
 // Suppress errors.
-error_reporting(E_ALL);
+error_reporting(E_ALL ^ E_NOTICE);
+
+
 
 
 // Path to the chat directory:

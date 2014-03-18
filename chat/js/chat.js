@@ -769,7 +769,7 @@ var ajaxChat = {
 	makeRequest: function(url, method, data) {
 		var identifier;
 		this.setStatus('waiting');
-		
+		console.log(data);
 		try {
 			if(data) {
 				// Create up to 50 HTTPRequest objects:
@@ -889,6 +889,7 @@ var ajaxChat = {
 	},
 	
 	handleInfoMessage: function(infoType, infoData) {
+		console.log(infoType);
 		switch(infoType) {
 			case 'channelSwitch':
 				this.clearChatList();
@@ -1173,9 +1174,12 @@ var ajaxChat = {
 				menu	+= '<li><a href="javascript:ajaxChat.sendMessageWrapper(\'/join\');">'
 						+ this.lang['userMenuEnterPrivateRoom']
 						+ '</a></li>';
-				if(this.userRole === '2' || this.userRole === '3') {
-					menu	+= '<li><a href="javascript:ajaxChat.sendMessageWrapper(\'/bans\');">'
-							+ this.lang['userMenuBans']
+				if(this.userRole === '2' || this.userRole === '3') { //admin y moderadores
+//					menu	+= '<li><a href="javascript:ajaxChat.sendMessageWrapper(\'/bans\');">'
+//							+ this.lang['userMenuBans']
+//							+ '</a></li>';
+					menu	+= '<li><a href="javascript:ajaxChat.sendMessageWrapper(\'/round\');">'
+							+ this.lang['startChatRound']
 							+ '</a></li>';
 				}
 			}
@@ -1183,6 +1187,7 @@ var ajaxChat = {
 		menu += this.getCustomUserMenuItems(encodedUserName, userID);
 		return menu;
 	},
+
 	
 	setOnlineListRowClasses: function() {
 		if(this.dom['onlineList']) {
@@ -1657,6 +1662,7 @@ var ajaxChat = {
 		if(!text) {
 			return;
 		}
+
 		text = this.parseInputMessage(text);
 		if(text) {
 			clearTimeout(this.timer);
@@ -2132,6 +2138,9 @@ var ajaxChat = {
 					return this.replaceCommandRoll(textParts);
 				case '/nick':
 					return this.replaceCommandNick(textParts);
+				case '/round':
+					return this.replaceCommandRound(textParts);
+					
 				case '/error':
 					return this.replaceCommandError(textParts);
 				default:
@@ -2143,6 +2152,14 @@ var ajaxChat = {
 		return text;
 	},
 
+	replaceCommandRound: function(textParts) {
+		//var rollText = this.lang['roll'].replace(/%s/, textParts[1]);
+		//rollText = rollText.replace(/%s/, textParts[2]);
+		//rollText = rollText.replace(/%s/, textParts[3]);
+		return	'<span class="chatBotMessage">'
+				+ "Comenzó un nuevo round de chats! Tienen 5 minutos para discutir"
+				+ '</span>';		
+	},
 	replaceCommandLogin: function(textParts) {
 		return	'<span class="chatBotMessage">'
 				+ this.lang['login'].replace(/%s/, textParts[1])
@@ -2942,6 +2959,7 @@ var ajaxChat = {
 	// Override to perform custom actions on new messages:
 	// Return true if message is to be added to the chatList, else false
 	customOnNewMessage: function(dateObject, userID, userName, userRole, messageID, messageText, channelID, ip) {
+		console.log(channelID+" "+messageText);
 		return true;
 	}
 

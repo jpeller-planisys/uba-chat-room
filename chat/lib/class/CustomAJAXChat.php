@@ -42,7 +42,7 @@ class CustomAJAXChat extends AJAXChat {
 				//print_r($onlineUsersData);
 				//die();
 
-				$id = 0;
+				$id = 1;
 				foreach($onlineUsersData as $onlineUser)
 				{
 					if($userName == $onlineUser["userName"]) return null;
@@ -174,6 +174,257 @@ class CustomAJAXChat extends AJAXChat {
 		// Channel array structure should be:
 		// ChannelName => ChannelID
 		return array_flip($channels);
+	}
+	
+	function getSeenPairs()
+	{
+
+		// Create a new SQL query:
+		$result = $this->db->sqlQuery('SELECT one, other FROM seen_pairs;');
+		
+		// Stop if an error occurs:+
+		if($result->error()) {
+			echo $result->getError();
+			die();
+		}
+		
+		while($row = $result->fetch()) 
+			$res[] = array($row["one"], $row["other"]);
+		
+		$result->free();
+		return $res;
+	}
+
+	function checkPair($i, $j)
+	{
+		// Create a new SQL query:
+		$result = $this->db->sqlQuery("SELECT one, other FROM seen_pairs WHERE (one = $i AND other = $j) OR (one = $j AND other = $i);");
+		
+		// Stop if an error occurs:
+		if($result->error()) {
+			echo $result->getError();
+			die();
+		}
+
+		$res = array();
+		
+		while($row = $result->fetch()) 
+			$res[] = array($row["one"], $row["other"]);
+		
+		$result->free();
+		return count($res) > 0;
+	}
+
+	function savePair($i, $j)
+	{
+		$result = $this->db->sqlQuery("INSERT INTO seen_pairs(one, other) VALUES($i, $j);");
+		// Stop if an error occurs:
+		if($result->error()) {
+			echo $result->getError();
+			die();
+		}
+		return true;
+
+	}
+
+	function getUserPairs($m)
+	{
+		$seenPairs = $this->getSeenPairs();
+		$n = $m-1;
+		$combinations = (($n * $n) + $n) / 2;
+		if(count($seenPairs) == $combinations)
+		{
+			return false;
+		}
+
+		while($k < $combinations*1000)
+		{
+			$i = rand(1, $m);
+			$j = rand(1, $m);
+			if($i == $j) continue;
+			if($this->checkPair($i, $j)) continue;
+			//if($this->savePair($i, $j))
+			//{
+				return array(array($i, $j));
+			//}
+			$k++;
+		}
+
+		return false;
+	}
+
+	function insertParsedMessageRound($textParts) {
+
+		$text = '/round';
+		$usersData = $this->getOnlineUsersData();
+		if(count($usersData) % 2 != 1 )
+		{
+			$text = '/error InvalidCountUsers '.(count($usersData)-1);
+			$this->insertChatBotMessage(
+				$this->getPrivateMessageID(),
+				$text
+			);
+		}
+		else
+		{
+			if($pairs = $this->getUserPairs(count($usersData)-1))
+			{
+				//print_r($pairs);
+				foreach($pairs as $pair)
+				{
+					//$this->createChannel();
+					$this->switchOtherUsersChannel("Tema_1", $usersData[$pair[0]]);
+					$this->switchOtherUsersChannel("Tema_1", $usersData[$pair[1]]);	
+				}	
+			}
+			else
+			{
+				$text = '/error ExhaustedCombinations '.(count($usersData)-1);
+				$this->insertChatBotMessage(
+				$this->getPrivateMessageID(),
+				$text
+				);		
+			}
+
+			
+			
+		}
+		
+		//$this->switchChannel("Tema_1");
+		
+	}
+
+	function resetChannelSwitchFlags()
+	{
+		$sql = 'UPDATE
+					'.$this->getDataBaseTable('online').'
+				SET
+					newChannel 	= \'\',
+					channelSwitch 	= 0,
+					dateTime 	= NOW()
+				WHERE
+					userID = '.$this->db->makeSafe($this->getUserID()).';';
+					
+		// Create a new SQL query:
+		$result = $this->db->sqlQuery($sql);
+		
+		// Stop if an error occurs:
+		if($result->error()) {
+			echo $result->getError();
+			die();
+		}
+		
+		return true;
+	}
+
+
+	function loadSwitchChannelInfo()
+	{
+		$userData = $this->getUserData();
+		if($userData["channelSwitch"])
+		{
+			$this->switchChannel($this->getChannelNameFromChannelID($userData["newChannel"]));
+			$this->resetChannelSwitchFlags();
+
+		}
+
+	}
+
+
+	function updateOtherUsersOnlineList($otherUser) {
+		$sql = 'UPDATE
+					'.$this->getDataBaseTable('online').'
+				SET
+					userName 	= '.$this->db->makeSafe($otherUser["userName"]).',
+					channel 	= '.$this->db->makeSafe($otherUser["newChannel"]).',
+					dateTime 	= NOW()
+				WHERE
+					userID = '.$this->db->makeSafe($otherUser["userID"]).';';
+					
+		// Create a new SQL query:
+		$result = $this->db->sqlQuery($sql);
+		
+		// Stop if an error occurs:
+		if($result->error()) {
+			echo $result->getError();
+			die();
+		}
+		
+		$this->resetOnlineUsersData();
+	}
+
+	function setOtherUsersChannel($channelID, $otherUser)
+	{
+		$sql = 'UPDATE
+					'.$this->getDataBaseTable('online').'
+				SET
+					newChannel 	= '.$this->db->makeSafe($channelID).',
+					channelSwitch 	= 1,
+					dateTime 	= NOW()
+				WHERE
+					userID = '.$this->db->makeSafe($otherUser["userID"]).';';
+					
+		// Create a new SQL query:
+		$result = $this->db->sqlQuery($sql);
+		
+		// Stop if an error occurs:
+		if($result->error()) {
+			echo $result->getError();
+			die();
+		}
+		
+		return true;
+	}
+
+	function switchOtherUsersChannel($channelName, $otherUser = false) {
+		
+
+		$channelID = $this->getChannelIDFromChannelName($channelName);
+		
+		if(false && $channelID !== null && (!$otherUserName && $otherUser["channel"] == $channelID)) { //la condicion deberia chequear el canal del otro
+			// User is already in the given channel, return:
+			return;
+		}
+		// Check if we have a valid channel:
+		if(!$this->validateChannel($channelID)) {
+			// Invalid channel:
+			$text = '/error InvalidChannelName '.$channelName;
+			$this->insertChatBotMessage(
+				$this->getPrivateMessageID(),
+				$text
+			);
+			return;
+		}
+
+		$userName = $otherUser["userName"];
+
+		$this->setOtherUsersChannel($channelID, $otherUser);
+
+		$oldChannel = $otherUser["channel"];
+
+		
+		$this->updateOnlineList();
+		$this->updateOtherUsersOnlineList($otherUser);
+		
+		// Channel leave message
+		/*$text = '/channelLeave '.$userName;
+		$this->insertChatBotMessage(
+			$oldChannel,
+			$text,
+			null,
+			1
+		);
+
+		// Channel enter message
+		$text = '/channelEnter '.$userName;
+		$this->insertChatBotMessage(
+			$channelID,
+			$text,
+			null,
+			1
+		);
+
+		$this->_requestVars['lastID'] = 0;*/
 	}
 
 }

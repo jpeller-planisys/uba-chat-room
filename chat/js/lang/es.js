@@ -9,7 +9,7 @@
 
 // Ajax Chat language Object:
 var ajaxChatLang = {
-	
+	startChatRound : 'Lanzar ronda de chats',
 	login: '%s entra al Chat.',
 	logout: '%s sale del Chat.',
 	logoutTimeout: '%s se ha desconectado (Tiempo de espera agotado).',
@@ -87,6 +87,8 @@ var ajaxChatLang = {
 	errorSoundIO: 'Error: No se ha podido cargar el fichero de sonido (Error IO Flash).',
 	errorSocketIO: 'Error: No se ha podido conectar al servidor socket (Error IO Flash).',
 	errorSocketSecurity: 'Error: No se ha podido conectar al servidor socket (Error Seguridad Flash).',
+	errorInvalidCountUsers: 'Error: La cantidad de usuarios es impar (%s).',
+	errorExhaustedCombinations: "Fin de experimento: se acabaron las combinaciones",
 	errorDOMSyntax: 'Error: Sintaxis DOM No Válida (DOM ID: %s).'
 	
 }

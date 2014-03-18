@@ -536,11 +536,15 @@ class AJAXChat {
 			1
 		);
 	}
+
 	
-	function switchChannel($channelName) {
+	
+	function switchChannel($channelName, $otherUserName = false) {
+		
+
 		$channelID = $this->getChannelIDFromChannelName($channelName);
 
-		if($channelID !== null && $this->getChannel() == $channelID) {
+		if($channelID !== null && (!$otherUserName && $this->getChannel() == $channelID)) { //la condicion deberia chequear el canal del otro
 			// User is already in the given channel, return:
 			return;
 		}
@@ -556,13 +560,24 @@ class AJAXChat {
 			return;
 		}
 
+		if(!$otherUserName)
+		{
+			$userName = $this->getUserName();
+			$this->setChannel($channelID);
+		}
+		else
+		{
+			$userName = $otherUserName;
+		}
+			
+
 		$oldChannel = $this->getChannel();
 
-		$this->setChannel($channelID);
+		
 		$this->updateOnlineList();
 		
 		// Channel leave message
-		$text = '/channelLeave '.$this->getUserName();
+		$text = '/channelLeave '.$userName;
 		$this->insertChatBotMessage(
 			$oldChannel,
 			$text,
@@ -571,7 +586,7 @@ class AJAXChat {
 		);
 
 		// Channel enter message
-		$text = '/channelEnter '.$this->getUserName();
+		$text = '/channelEnter '.$userName;
 		$this->insertChatBotMessage(
 			$this->getChannel(),
 			$text,
@@ -631,6 +646,7 @@ class AJAXChat {
 		
 		$this->removeUserFromOnlineUsersData();
 	}
+
 	
 	function updateOnlineList() {
 		$sql = 'UPDATE
@@ -757,6 +773,10 @@ class AJAXChat {
 				// Listing information about a User:
 				case '/whois':
 					$this->insertParsedMessageWhois($textParts);
+					break;
+
+				case '/round':
+					$this->insertParsedMessageRound($textParts);
 					break;
 				
 				// Rolling dice:
@@ -1262,6 +1282,8 @@ class AJAXChat {
 		}
 	}
 			
+	
+
 	function insertParsedMessageRoll($textParts) {
 		if(count($textParts) == 1) {
 			// default is one d6:
@@ -2338,11 +2360,28 @@ class AJAXChat {
 			die();
 		}
 	}
+
+	function getUserData()
+	{
+		$allData = $this->getOnlineUsersData();
+		foreach($allData as $aUserData)
+		{
+			if($aUserData["userID"] == $this->getUserID()) return $aUserData;
+		}
+
+		return false;
+	}
+
 	
 	function getInfoMessages($type=null) {
+		
+		$this->loadSwitchChannelInfo();
+
 		if(!isset($this->_infoMessages)) {
 			$this->_infoMessages = array();
 		}
+		
+
 		if($type) {
 			if(!isset($this->_infoMessages[$type])) {
 				$this->_infoMessages[$type] = array();
@@ -2393,7 +2432,9 @@ class AJAXChat {
 						userRole,
 						channel,
 						UNIX_TIMESTAMP(dateTime) AS timeStamp,
-						ip
+						ip,
+						channelSwitch,
+						newChannel
 					FROM
 						'.$this->getDataBaseTable('online').'
 					ORDER BY
@@ -3272,7 +3313,7 @@ class AJAXChat {
 	// Return true if a custom command has been successfully parsed, else false
 	// $text contains the whole message, $textParts the message split up as words array
 	function parseCustomCommands($text, $textParts) {
-		return false;
+		return true;
 	}
 
 	// Override to perform custom actions on new messages:
