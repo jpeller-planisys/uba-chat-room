@@ -44,7 +44,7 @@
 <body onload="initializeLoginPage();">
 	<div id="loginContent">
 		<div id="loginHeadlineContainer">
-			<h1>[LANG]title[/LANG]</h1>
+			<h1>[LANG]title[/LANG]</h1> 
 		</div>
 		<form id="loginForm" action="[LOGIN_URL/]" method="post" enctype="application/x-www-form-urlencoded">
 			<div id="loginFormContainer">
@@ -66,6 +66,9 @@
 			</div>
 		</form>
 		<div id="errorContainer">[ERROR_MESSAGES/]<noscript><div>[LANG]requiresJavaScript[/LANG]</div></noscript></div>
+	</div>
+	<div style="display:block;position:absolute;right:0px;top:10px;font-size:8px;">
+		<a href="?pass=1">[Admin login]</a>
 	</div>
 </body>
 
