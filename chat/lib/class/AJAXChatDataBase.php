@@ -91,5 +91,16 @@ class AJAXChatDataBase {
 		
 	}
 
+	function getAssoc($sql)
+	{
+		$result = $this->query($sql);
+
+		$res = array();
+		while($row = $result->fetch()) $res[] = $row;
+		
+		$result->free();
+		return $res;
+	}
+
 }
 ?>
