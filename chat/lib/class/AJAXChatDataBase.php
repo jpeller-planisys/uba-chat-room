@@ -77,5 +77,19 @@ class AJAXChatDataBase {
 		return $this->_db->getLastInsertedID();
 	}
 
+	function query($sql)
+	{
+		$result = $this->db->sqlQuery($sql);
+		
+		// Stop if an error occurs:+
+		if($result->error()) {
+			echo $result->getError();
+			die();
+		}
+
+		return $result;
+		
+	}
+
 }
 ?>
