@@ -79,7 +79,7 @@ class AJAXChatDataBase {
 
 	function query($sql)
 	{
-		$result = $this->db->sqlQuery($sql);
+		$result = $this->sqlQuery($sql);
 		
 		// Stop if an error occurs:+
 		if($result->error()) {
