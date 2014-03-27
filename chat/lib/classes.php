@@ -23,4 +23,8 @@ require(AJAX_CHAT_PATH.'lib/class/AJAXChatTemplate.php');
 require(AJAX_CHAT_PATH.'lib/class/CustomAJAXChat.php');
 require(AJAX_CHAT_PATH.'lib/class/CustomAJAXChatShoutBox.php');
 require(AJAX_CHAT_PATH.'lib/class/CustomAJAXChatInterface.php');
+
+require(AJAX_CHAT_PATH.'uba/PairHandler.php');
+require(AJAX_CHAT_PATH.'uba/Log.php');
+require(AJAX_CHAT_PATH.'uba/Combinatorics.php');
 ?>

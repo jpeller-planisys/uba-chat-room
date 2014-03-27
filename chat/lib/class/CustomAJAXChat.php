@@ -9,6 +9,30 @@
 
 class CustomAJAXChat extends AJAXChat {
 
+	function __construct($handle_request = true)
+	{
+	   	if(!$handle_request)
+	   	{
+	   		// Initialize configuration settings:
+			$this->initConfig();
+
+			// Initialize the DataBase connection:
+			$this->initDataBaseConnection();
+
+			// Initialize request variables:
+			$this->initRequestVars();
+			
+			// Initialize the chat session:
+			$this->initSession();
+	   	}
+	   	else
+	   	{
+	   		parent::__construct();
+	   	}
+
+
+	}
+
 	// Returns an associative array containing userName, userID and userRole
 	// Returns null if login is invalid
 	function getValidLoginUserData() {
@@ -176,87 +200,37 @@ class CustomAJAXChat extends AJAXChat {
 		return array_flip($channels);
 	}
 	
-	function getSeenPairs()
-	{
-
-		// Create a new SQL query:
-		$result = $this->db->sqlQuery('SELECT one, other FROM seen_pairs;');
-		
-		// Stop if an error occurs:+
-		if($result->error()) {
-			echo $result->getError();
-			die();
-		}
-		
-		while($row = $result->fetch()) 
-			$res[] = array($row["one"], $row["other"]);
-		
-		$result->free();
-		return $res;
-	}
-
-	function checkPair($i, $j)
-	{
-		// Create a new SQL query:
-		$result = $this->db->sqlQuery("SELECT one, other FROM seen_pairs WHERE (one = $i AND other = $j) OR (one = $j AND other = $i);");
-		
-		// Stop if an error occurs:
-		if($result->error()) {
-			echo $result->getError();
-			die();
-		}
-
-		$res = array();
-		
-		while($row = $result->fetch()) 
-			$res[] = array($row["one"], $row["other"]);
-		
-		$result->free();
-		return count($res) > 0;
-	}
-
-	function savePair($i, $j)
-	{
-		$result = $this->db->sqlQuery("INSERT INTO seen_pairs(one, other) VALUES($i, $j);");
-		// Stop if an error occurs:
-		if($result->error()) {
-			echo $result->getError();
-			die();
-		}
-		return true;
-
-	}
-
-	function getUserPairs($m)
-	{
-		$seenPairs = $this->getSeenPairs();
-		$n = $m-1;
-		$combinations = (($n * $n) + $n) / 2;
-		if(count($seenPairs) == $combinations)
-		{
-			return false;
-		}
-
-		while($k < $combinations*1000)
-		{
-			$i = rand(1, $m);
-			$j = rand(1, $m);
-			if($i == $j) continue;
-			if($this->checkPair($i, $j)) continue;
-			//if($this->savePair($i, $j))
-			//{
-				return array(array($i, $j));
-			//}
-			$k++;
-		}
-
-		return false;
-	}
 
 	function insertParsedMessageRound($textParts) {
 
 		$text = '/round';
 		$usersData = $this->getOnlineUsersData();
+		/*Array
+		(
+		    [0] => Array
+		        (
+		            [userID] => 1
+		            [userName] => admin
+		            [userRole] => 3
+		            [channel] => 0
+		            [timeStamp] => 1395860965
+		            [ip] => 127.0.0.1
+		            [channelSwitch] => 0
+		            [newChannel] => 0
+		        )
+
+		    [1] => Array
+		        (
+		            [userID] => 2
+		            [userName] => usaurio
+		            [userRole] => 1
+		            [channel] => 0
+		            [timeStamp] => 1395860968
+		            [ip] => 127.0.0.1
+		            [channelSwitch] => 0
+		            [newChannel] => 0
+		)*/
+
 		if(count($usersData) % 2 != 1 )
 		{
 			$text = '/error InvalidCountUsers '.(count($usersData)-1);
@@ -267,7 +241,8 @@ class CustomAJAXChat extends AJAXChat {
 		}
 		else
 		{
-			if($pairs = $this->getUserPairs(count($usersData)-1))
+			$pairHandler = new PairHandler($this->db);
+			if($pairs = $this->generateRoundPairs($usersData))
 			{
 				//print_r($pairs);
 				foreach($pairs as $pair)
