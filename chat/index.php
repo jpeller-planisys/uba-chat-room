@@ -26,9 +26,9 @@ require(AJAX_CHAT_PATH.'lib/classes.php');
 
 function pre($val, $msg = "")
 {
-	echo ($msg?"$msg:":"")."<pre>";
+	echo ($msg?"$msg:":"")."";
 	print_r($val);
-	echo "</pre>";
+	echo "";
 }
 //echo "<pre>";
 
@@ -37,20 +37,14 @@ function pre($val, $msg = "")
 // Initialize the chat:
 $ajaxChat = new CustomAJAXChat(false);
 
-$pairCombinator = new PairHandler2($ajaxChat->db);
+$pairCombinator = new PairHandler3($ajaxChat->db);
 
 
- 
+ 	
 		$ids = array(1,2,3,4,5,6,7,8);
-		$pairCombinator->initializeFor($ids);
-		$res = true;
-		$rounds = 0;
-		while($res !== false)
-		{	
-			$res = $pairCombinator->getRound();	
-			$rounds++;
-		}
-		echo "para ".count($ids)." tuve ".($rounds-1)." rounds<br>";
+		$res = $pairCombinator->initializeFor($ids);
+		echo "Termine, ganaste: ".$pairCombinator->reprGame($res)."<br>";
+		die();
 
 
 
