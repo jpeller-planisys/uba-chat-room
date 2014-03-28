@@ -52,7 +52,7 @@ class Math_Combinatorics
      * @param  int   $subset_size  Subset size
      * @return array An array of combinations
      */
-    public function combinations(array $set, $subset_size = null)
+    public function combinations(array $set, $subset_size = null, $filterFunction = null)
     {
         $set_size = count($set);
 
@@ -74,7 +74,11 @@ class Math_Combinatorics
 
         $combinations[] = $this->_getCombination($set);
         while ($this->_advancePointers($subset_size - 1, $set_size - 1)) {
-            $combinations[] = $this->_getCombination($set);
+            
+            $new_combination = $this->_getCombination($set);
+
+            if(!$filterFunction || call_user_func($filterFunction, $new_combination))$combinations[] = $new_combination;
+                
         }
 
         return $combinations;
