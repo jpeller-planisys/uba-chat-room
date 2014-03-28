@@ -26,9 +26,9 @@ require(AJAX_CHAT_PATH.'lib/classes.php');
 
 function pre($val, $msg = "")
 {
-	echo ($msg?"$msg:":"")."";
+	echo ($msg?"$msg:":"")."<pre>";
 	print_r($val);
-	echo "";
+	echo "</pre>";
 }
 //echo "<pre>";
 
@@ -41,7 +41,7 @@ $pairCombinator = new PairHandler3($ajaxChat->db);
 
 
  	
-		$ids = array(1,2,3,4,5,6,7,8);
+		$ids = array(1,2,3,4,5,6,7,8,9,10);
 		$res = $pairCombinator->initializeFor($ids);
 		echo "Termine, ganaste: ".$pairCombinator->reprGame($res)."<br>";
 		die();

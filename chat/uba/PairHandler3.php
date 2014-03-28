@@ -31,43 +31,36 @@ class PairHandler3
 		$this->db->query("INSERT INTO current_round_data VALUES('".json_encode($this->internal_data)."')");
 	}
 
-	function pairContains($pair, $individual)
+	static function pairContains($pair, $individual)
 	{
 		return in_array($individual, $pair);
 	}
 
 	//check for all pairs in round to be different
-	function isValidRound($round)
+	static function isValidRound($in_round)
 	{
+		$round = array_values($in_round);
 		for ($i=0; $i < count($round); $i++) { 
 			for ($j= $i+1; $j < count($round); $j++) { 
-				
-					if($this->pairContains($round[$i], $round[$j][0])
-					   || $this->pairContains($round[$i], $round[$j][1])
-					   || $this->pairContains($round[$j], $round[$i][0])
-					   || $this->pairContains($round[$j], $round[$i][1]) 
-						) return false;
-					
+				$all_diff = true;
+				foreach($round[$i] as $one)
+					foreach($round[$j] as $other) $all_diff &= $one != $other;
+			
+				if(!$all_diff) return false;
 				
 			}
 		}
 		return true;
 	}
 
+
+
 	function filterValidRounds($rounds)
 	{
-		$valid_rounds = array();
-		echo "pre loop: ".count($rounds)."<br>";
-		for ($i=0; $i < count($rounds); $i++) 
-		{ 
-			$rounds[$i] = array_map('array_values', $rounds[$i]);
-			$rounds[$i] = array_values($rounds[$i]);
-			if($this->isValidRound($rounds[$i]))
-			{
-				$valid_rounds[] = $rounds[$i];
-			} 
-		}
-		echo "llegue aca";
+		//echo "pre loop: ".count($rounds)."<br>";
+		$rounds = array_map('array_values', $rounds);
+		//echo "pase el map<br>";
+		$valid_rounds =	array_filter($rounds, array("PairHandler3", "isValidRound"));
 
 		return $valid_rounds;
 	}
@@ -213,8 +206,8 @@ class PairHandler3
 
 		$all_pairs = array_map('array_values', $this->combinatorics->combinations($ids, 2));
 
-		echo "all_pairs.".count($all_pairs)."<br>"		;
-		$all_rounds =  $this->combinatorics->combinations($all_pairs, count($ids)/2);
+		echo "all_pairs.".count($all_pairs)."<br>";
+		$all_rounds =  $this->combinatorics->combinations($all_pairs, count($ids)/2, array("PairHandler3", "isValidRound"));
 		echo "all_rounds.".count($all_rounds)."<br>";		
 		unset($all_pairs);
 		
