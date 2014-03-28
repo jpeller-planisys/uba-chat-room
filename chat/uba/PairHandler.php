@@ -60,60 +60,151 @@ class PairHandler
 	function reset()
 	{
 		$result = $this->db->query("DELETE FROM seen_pairs;");
+		$this->seen_pairs = array();
 		return true;
 	}
 
 	function pairEquals($pair1, $pair2)
 	{
-		return (($pair1[0] == $pair2[0] && $pairs1[1] == $pair2[1]) || $pair1[0] == $pair2[1] && $pairs1[1] == $pair2[0]));
+		return (($pair1[0] == $pair2[0] && $pair1[1] == $pair2[1]) || ($pair1[0] == $pair2[1] && $pair1[1] == $pair2[0]));
 	}
 
 
-	function generateRoundPairs($onlineUsersID)
+	function getAllPairs($ids)
 	{
-		$all_combinations = $this->combinatorics->combinations($onlineUsersID, 2);
-		return;
-		$seen_pairs = $this->getSeenPairs();
-		echo "seen_pairs:";
-		print_r($seen_pairs);
-		$combinations = $this->combinationsFor($total_users);
+		return array_map('array_values', $this->combinatorics->combinations($ids, 2));
+	}
+	
+	function getAvailablePairs($ids)
+	{
+		$all = $this->getAllPairs($ids);
+		$seen = $this->getSeenPairs();
+		$avail = array();
+		//pre($seen);
+		for ($i=0; $i < count($all); $i++) { 
+			$found = false;
+			
+			for ($j=0; $j < count($seen) && !$found; $j++) 
+				$found |= $this->pairEquals($all[$i], $seen[$j]);
+			
+			if(!$found) $avail[] = $all[$i];
+		}
+		return $avail;
+	}
+
+	function pairContains($pair, $individual)
+	{
+		return in_array($individual, $pair);
+	}
+	
+	function removeIndividualsFromPairs($pairs, $pair)
+	{
+		$result = array();
+
+		foreach ($pairs as $one_pair) 
+		{
+			if(!$this->pairContains($one_pair, $pair[0]) && !$this->pairContains($one_pair, $pair[1])) $result[] = $one_pair;
+		}
+
+		return $result;
+	}
+
+	function chooseOnePair($available_pairs, $unassigned_individuals)
+	{
+		for ($i=0; $i < count($available_pairs); $i++)  $valid_indexes[$i] = $i;
 		
-		echo "<br>combinations:".$combinations."<br>";
-		if($total_users % 2 != 0 )
+
+		while(count($valid_indexes) > 0)
+		{
+			$index_of_indexes = rand(0, count($valid_indexes) -1);	
+			$i = $valid_indexes[$index_of_indexes];
+
+			//echo "avail:".count($available_pairs)."<br>";
+			//echo "una:".count($unassigned_individuals)."<br>";
+			//echo "index:".count($valid_indexes)."<br>";
+			//echo "i: {$i} <br>";
+			
+
+			$post_selection_pairs = $available_pairs;
+			$pair = $available_pairs[$i];
+			//pre($pair, "par");
+			$post_selection_pairs = $this->removeIndividualsFromPairs($available_pairs, $pair);
+			//pre($post_selection_pairs, "post");
+
+			if($this->existsOnePairForEachIndividual($post_selection_pairs, array_values(array_diff($unassigned_individuals, $pair))))
+				return $i;
+
+
+			$valid_indexes = array_values(array_diff($valid_indexes, [$i]));
+
+		}
+		
+		Log::log("Error in chooseOnePair");
+		return 400000;
+
+	}
+
+	function existsOnePairForEachIndividual($pairs, $individuals)
+	{
+		//pre($pairs);
+		//pre($individuals);
+		//die();
+		for($i=0; $i < count($individuals); $i++) { 
+			
+			$found = false;
+			for ($j=0; $j < count($pairs) && ! $found; $j++) 
+				$found |= $this->pairContains($pairs[$j], $individuals[$i]);
+			
+			if(!$found) return false;
+		}
+		return true;
+	}
+
+	function generateRoundPairs($ids)
+	{
+		
+		if(count($ids) % 2 != 0 )
 		{
 			Log::log("Total users is not even");
 			return false;
 		}
 
-		if(count($seen_pairs) == $combinations)
+		$available_pairs = $this->getAvailablePairs($ids);
+		//pre($available_pairs);
+		//die();
+		$unassigned_individuals = $ids;
+		$selected_pairs = array();
+		
+		if(count($available_pairs) == 0)
 		{
 			Log::log("All combinations were seen! End of the experiment");
 			return false;
 		}
 
-		$assigned_users = array();
-		$round_pairs = array();
-		while(count($round_pairs) <= ($total_users/2) && $anti_infinity_counter < 10000000)
+		
+		while(count($unassigned_individuals) > 0)
 		{
-			$anti_infinity_counter++; 
-
-			$i = rand(1, $total_users);
-			$j = rand(1, $total_users);
-			if($i == $j || in_array($i, $assigned_users) || in_array($j, $assigned_users)) continue;
-			if($this->seenPair($i, $j)) continue;
 			
-
-			if($this->savePair($i, $j))
+			$i = $this->chooseOnePair($available_pairs, $unassigned_individuals);
+			
+			$pair = $available_pairs[$i];
+			
+			$available_pairs = $this->removeIndividualsFromPairs($available_pairs, $pair);
+			$selected_pairs[] = $pair;
+			if(!$pair)
 			{
-				echo "($i, $j)<br>";
-				$assigned_users[] = $i;
-				$assigned_users[] = $j;
-				$round_pairs[] = array($i, $j);
-			}
-			
+				pre($i, "i");	
+				pre($available_pairs, "avail");
+				pre($unassigned_individuals, "unassigned");
+				pre($selected_pairs, "selected");
+			} 
+			$unassigned_individuals =  array_values(array_diff($unassigned_individuals, $pair));
+
 		}
 
-		return false;
+		foreach($selected_pairs as $pair) $this->savePair($pair[0], $pair[1]);
+		return $selected_pairs;
+		
 	}
 
 }

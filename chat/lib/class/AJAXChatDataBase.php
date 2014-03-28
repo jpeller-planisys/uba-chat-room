@@ -91,7 +91,7 @@ class AJAXChatDataBase {
 		
 	}
 
-	function getAssoc($sql)
+	function getAssoc($sql, $first = false)
 	{
 		$result = $this->query($sql);
 
@@ -99,7 +99,7 @@ class AJAXChatDataBase {
 		while($row = $result->fetch()) $res[] = $row;
 		
 		$result->free();
-		return $res;
+		return $first? $res[0] : $res;
 	}
 
 }

@@ -23,24 +23,43 @@ require(AJAX_CHAT_PATH.'lib/custom.php');
 require(AJAX_CHAT_PATH.'lib/classes.php');
 
 
+
+function pre($val, $msg = "")
+{
+	echo ($msg?"$msg:":"")."<pre>";
+	print_r($val);
+	echo "</pre>";
+}
 //echo "<pre>";
+
+
 
 // Initialize the chat:
 $ajaxChat = new CustomAJAXChat(false);
 
-$pairCombinator = new PairHandler($ajaxChat->db);
+$pairCombinator = new PairHandler2($ajaxChat->db);
 
-$pairCombinator->reset();
 
-$res = $pairCombinator->generateRoundPairs(array(1, 2, 3, 4, 5, 6));
+ 
+		$ids = array(1,2,3,4,5,6,7,8);
+		$pairCombinator->initializeFor($ids);
+		$res = true;
+		$rounds = 0;
+		while($res !== false)
+		{	
+			$res = $pairCombinator->getRound();	
+			$rounds++;
+		}
+		echo "para ".count($ids)." tuve ".($rounds-1)." rounds<br>";
 
-die();
+
+
+
+//$pairCombinator->reset();
 echo "<pre>";
-print_r($res);
-echo "algo";
-//$res = $pairCombinator->generateRoundPairs(4);
-//echo "<pre>";
-//print_r($res);
+
+
+
 
 
 

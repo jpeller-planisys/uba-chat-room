@@ -10,7 +10,7 @@ class Log
 	
 	static function log($line)
 	{
-		echo $line;
+		//echo $line;
 	}
 }
 
