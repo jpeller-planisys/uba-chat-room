@@ -35,22 +35,8 @@ function pre($val, $msg = "")
 
 
 // Initialize the chat:
-$ajaxChat = new CustomAJAXChat(false);
+$ajaxChat = new CustomAJAXChat();
 
-$pairCombinator = new PairHandler3($ajaxChat->db);
-
-
- 	
-		$ids = array(1,2,3,4,5,6,7,8,9,10);
-		$res = $pairCombinator->initializeFor($ids);
-		echo "Termine, ganaste: ".$pairCombinator->reprGame($res)."<br>";
-		die();
-
-
-
-
-//$pairCombinator->reset();
-echo "<pre>";
 
 
 

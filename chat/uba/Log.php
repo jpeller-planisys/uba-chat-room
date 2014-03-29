@@ -12,6 +12,11 @@ class Log
 	{
 		//echo $line;
 	}
+
+	static function debug($line)
+	{
+		//echo $line."<br>";
+	}
 }
 
 

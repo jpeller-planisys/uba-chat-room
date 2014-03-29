@@ -1,6 +1,6 @@
 <?php
 
-class PairHandler3
+class PairHandler
 {
 	var $db;
 
@@ -36,6 +36,164 @@ class PairHandler3
 		return in_array($individual, $pair);
 	}
 
+
+	function getPlayedRounds()
+	{
+		return $this->internal_data["played_rounds"]? $this->internal_data["played_rounds"] : array();
+
+	}
+
+	function getAllRounds()
+	{
+		return ($this->internal_data["game"]? array_keys($this->internal_data["game"]) : array());
+	}
+
+	function addPlayedRound($index)
+	{
+		$this->internal_data["played_rounds"][] = $index;
+		$this->flush();
+	}
+
+	function getNextRound()
+	{
+		$played = $this->getPlayedRounds();
+		$all = $this->getAllRounds();
+		$available = array_values(array_diff($all, $played));
+		
+		if(count($available) == 0)
+		{
+			Log::log("Game is over!");
+			return false;
+		}
+
+		$index = rand(0, count($available) - 1);
+		
+		$this->addPlayedRound($available[$index]);
+
+		return $this->internal_data["game"][$available[$index]];
+
+	}
+
+
+	function initializeFor($ids)
+	{
+		$this->reset();
+		if(count($ids) % 2 != 0 )
+		{
+			Log::log("Total users is not even");
+			return false;
+		}
+
+		$all_pairs = array_map('array_values', $this->combinatorics->combinations($ids, 2));
+
+		$valid_rounds =  $this->combinatorics->combinations($all_pairs, count($ids)/2, array("PairHandler", "isValidRound"));
+		
+		
+
+		$valid_rounds = array_map('array_values', $valid_rounds);
+
+
+		Log::debug("Total users: ". count($ids));
+		Log::debug("Total pairs: ".count($all_pairs));
+		Log::debug("Total valid rounds: ".count($valid_rounds));
+
+		unset($all_pairs);
+		
+		$this->valid_rounds = &$valid_rounds;// = $this->filterValidRounds($all_rounds);
+		
+		
+		
+		
+		$step = 0;
+		$game = array();
+		$used_in_step = array();
+		
+		for ($i=0; $i < count($ids)-1; $i++) 
+			$step_data[$i] = array("unviable_nodes" => array(), "already_tried" => array(), "marked_used" => array());
+
+
+		while($step < count($ids)-1 && $step >= 0)
+		{
+			Log::debug("Paso: $step");
+			if($this->addRound($game, $valid_rounds, $step_data[$step]) !== false)
+			{
+				if($this->validGame($game, $valid_rounds))
+				{
+
+					Log::debug("\tADVANCE un round: ".$this->reprRound($valid_rounds[$game[count($game)-1]]));
+					Log::debug("\tel juego ahora es asi:".$this->reprGame($game, $valid_rounds));
+					Log::debug("----");
+
+					$step++;
+				}
+				else
+				{
+					Log::debug("\tSTAY: agregue un round, pero hizo al juego invalido");
+					Log::debug("\tel juego era es asi: ".$this->reprGame($game, $valid_rounds));
+					
+					$step_data[$step]["already_tried"][] = array_pop($game);
+					
+					Log::debug("\tquedo asi: ".$this->reprGame($game, $valid_rounds));
+					Log::debug("\ty step_data asi: ".$this->reprStepData($step_data, $step));;
+					Log::debug("----");
+				}
+				
+			}
+			else
+			{
+				
+				$this->backTrackStep($step, $valid_rounds, $step_data, $game);
+				$step--;
+
+				Log::debug("BACKTRACK:".$this->reprGame($game, $valid_round));;
+				Log::debug("step_data: ".$this->reprStepData($step_data, $step));
+				Log::debug("step_data+1: ".$this->reprStepData($step_data, $step+1));
+				Log::debug("----");
+
+			}
+		}
+		
+		foreach($game as $round_index)
+		{
+			$valid_round_sequence[] = $valid_rounds[$round_index];
+		}
+		$this->internal_data["game"] = $valid_round_sequence;
+		$this->internal_data["played_rounds"] = array();
+		$this->flush();
+		return true;
+	}
+	
+	function pairEquals($pair1, $pair2)
+	{
+		return (($pair1[0] == $pair2[0] && $pair1[1] == $pair2[1]) || ($pair1[0] == $pair2[1] && $pair1[1] == $pair2[0]));
+	}
+
+	private function validGame($game, $valid_rounds)
+	{
+		if(count($game) < 2) return true;
+
+		$added_round = $valid_rounds[$game[count($game)-1]];
+		for ($i=0; $i < count($game)-1; $i++) 
+		{ 
+			$a_round = $valid_rounds[$game[$i]];
+			for ($k=0; $k < count($a_round); $k++) { 
+				
+				$a_pair = $a_round[$k];
+				for ($j=0; $j < count($added_round); $j++) 
+				{ 
+					$one_added_round_pair = $added_round[$j];
+
+					if($this->pairEquals($one_added_round_pair, $a_pair))
+					{
+						//echo $this->reprPair($one_added_round_pair)."==".$this->reprPair($a_pair);
+						return false;
+					}
+				}
+			}
+		}
+		return true;
+	}
+
 	//check for all pairs in round to be different
 	static function isValidRound($in_round)
 	{
@@ -54,15 +212,67 @@ class PairHandler3
 	}
 
 
-
-	function filterValidRounds($rounds)
+	private function filterValidRounds($rounds)
 	{
-		//echo "pre loop: ".count($rounds)."<br>";
 		$rounds = array_map('array_values', $rounds);
-		//echo "pase el map<br>";
-		$valid_rounds =	array_filter($rounds, array("PairHandler3", "isValidRound"));
-
+		$valid_rounds =	array_filter($rounds, array("PairHandler", "isValidRound"));
 		return $valid_rounds;
+	}
+
+
+	private function addRound(&$game, &$valid_rounds, &$this_step)
+	{
+		foreach($valid_rounds as $k => $v)
+		{
+			if(!in_array($k, $this_step["already_tried"]) && !in_array($k, $this_step["unviable_nodes"]))$usables[]=$k;	
+		}
+
+		if(!$usables) return false;
+
+		$random_index = rand(0, count($usables)-1);
+
+		$round_index = $usables[$random_index];
+
+		$game[] = $round_index;
+
+		return true;
+
+	}
+
+	private function backTrackStep($step, &$valid_rounds, &$step_data, &$game)
+	{
+		$bad_round = array_pop($game);
+		$step_data[$step-1]["unviable_nodes"][] = $bad_round;
+
+		//echo "backtrac step: {$step}<br>";
+		$step_data[$step]["already_tried"] = array();
+	}
+
+
+
+
+	function reprStepData($array, $step)
+	{
+		
+		$str = "";
+		foreach($array[$step] as $ind => $vals)
+		{				
+			if($vals)
+			{
+					$str.="$ind: [";
+					foreach($vals as $val)$str.="$val,";
+					$str= substr_replace($str, "", -1)."], ";
+			}
+		}
+
+		$str= substr_replace($str, "", -2);
+		$str.="], ";
+			
+		
+		$str= substr_replace($str, "", -2);
+
+		$str.=")";
+		return $str;
 	}
 
 	function reprPair($pair)
@@ -75,8 +285,7 @@ class PairHandler3
 		$str="[";
 		if(is_array($round))
 		{
-			if(is_array($round["pairs"])) $data = $round["pairs"];
-			else $data = $round;
+			$data = $round;
 
 			if($data)
 				foreach($data as $pair)
@@ -98,7 +307,6 @@ class PairHandler3
 		if($game)
 		foreach($game as $round_index)
 		{
-		
 			$str.=$this->reprRound($rounds[$round_index]).",";	
 		}
 		
@@ -107,254 +315,6 @@ class PairHandler3
 		if($str != "{") $str= substr_replace($str, "", -1);
 		return $str."}";	
 	}
-
-	function getPlayedRounds()
-	{
-		return $this->internal_data["played_rounds"]? $this->internal_data["played_rounds"] : array();
-
-	}
-
-	function addPlayedRound($index)
-	{
-		$this->internal_data["played_rounds"][] = $index;
-		$this->flush();
-	
-	}
-
-	function filterUnseenRounds($rounds)
-	{
-
-		$indexes = $this->getSeenRounds();
-		for ($i=0; $i < count($indexes); $i++) 
-			unset($rounds[$indexes[$i]]);
-
-		return $rounds;
-	}
-
-	function pairEquals($pair1, $pair2)
-	{
-		return (($pair1[0] == $pair2[0] && $pair1[1] == $pair2[1]) || ($pair1[0] == $pair2[1] && $pair1[1] == $pair2[0]));
-	}
-
-
-	function pairInArray($pair, $arrayOfPairs)
-	{
-		for ($i=0; $i < count($arrayOfPairs); $i++) { 
-			if($this->pairEquals($pair, $arrayOfPairs[$i])) return true;
-		}
-		return false;
-	}
-
-	function filterValidGames($paths)
-	{
-		$res = array();
-		foreach($paths as $path)
-		{
-			$pairs_in_path = array();
-			$valid_path = true;
-			foreach($path as $round)
-			{
-				foreach($round as $pair)
-				{
-					if($this->pairInArray($pair, $pairs_in_path)) $valid_path = false;
-					else $pairs_in_path[] = $pair;
-				}
-			}
-			if($valid_path) $res[] = $path;
-		}
-		
-		$res = array_map('array_values', $res);
-		
-		return array_values($res);
-	}
-
-	function validGame($game, $valid_rounds)
-	{
-		if(count($game) < 2) return true;
-
-		$added_round = $valid_rounds[$game[count($game)-1]]["pairs"];
-		for ($i=0; $i < count($game)-1; $i++) 
-		{ 
-			$a_round = $valid_rounds[$game[$i]]["pairs"];
-			for ($k=0; $k < count($a_round); $k++) { 
-				
-				$a_pair = $a_round[$k];
-				for ($j=0; $j < count($added_round); $j++) 
-				{ 
-					$one_added_round_pair = $added_round[$j];
-
-					if($this->pairEquals($one_added_round_pair, $a_pair))
-					{
-						//echo $this->reprPair($one_added_round_pair)."==".$this->reprPair($a_pair);
-
-						return false;
-					}
-				}
-			}
-		}
-		return true;
-	}
-
-	function initializeFor($ids)
-	{
-		$this->reset();
-		if(count($ids) % 2 != 0 )
-		{
-			Log::log("Total users is not even");
-			return false;
-		}
-
-		$all_pairs = array_map('array_values', $this->combinatorics->combinations($ids, 2));
-
-		echo "all_pairs.".count($all_pairs)."<br>";
-		$all_rounds =  $this->combinatorics->combinations($all_pairs, count($ids)/2, array("PairHandler3", "isValidRound"));
-		echo "all_rounds.".count($all_rounds)."<br>";		
-		unset($all_pairs);
-		
-		/*for ($i=0; $i < count($all_rounds); $i++) { 
-			$all_rounds[$i] = array_values($all_rounds[$i]);
-		}*/
-
-
-		echo "all_rounds.".count($all_rounds)."<br>";
-		$this->valid_rounds = $valid_rounds = $this->filterValidRounds($all_rounds);
-		
-		unset($all_round);
-		unset($all_pairs);
-		
-		foreach($valid_rounds as &$round) $round = array("pairs" => $round, "usable" => true);
-
-		
-		$step = 0;
-		$game = array();
-		$used_in_step = array();
-		for ($i=0; $i < count($ids)-1; $i++) 
-		{ 
-			$step_data[$i] = array("unviable_nodes" => array(), "already_tried" => array(), "marked_used" => array());
-		}
-
-
-		while($step < count($ids)-1 && $step >= 0)
-		{
-			echo "Paso: $step<br>";
-			if($this->addRound($game, $valid_rounds, $step_data[$step]) !== false)
-			{
-				if($this->validGame($game, $valid_rounds))
-				{
-
-					echo "\tADVANCE un round: ".$this->reprRound($valid_rounds[$game[count($game)-1]])."<br>";
-					echo "\tel juego ahora es asi:".$this->reprGame($game, $valid_rounds)."<br>";
-					echo "----<br>";
-					$step++;
-				}
-				else
-				{
-					echo "\tSTAY: agregue un round, pero hizo al juego invalido<br>";
-					echo "\tel juego era es asi: ".$this->reprGame($game, $valid_rounds)."<br>";
-					$step_data[$step]["already_tried"][] = array_pop($game);
-					echo "\tquedo asi: ".$this->reprGame($game, $valid_rounds)."<br>";
-					echo "\ty step_data asi: ".$this->reprStepData($step_data, $step)."<br>";
-					echo "----<br>";
-				}
-				
-			}
-			else
-			{
-				
-				$this->backTrackStep($step, $valid_rounds, $step_data, $game);
-				$step--;
-				echo "BACKTRACK:".$this->reprGame($game, $valid_round)."<br>";
-				echo "step_data: ".$this->reprStepData($step_data, $step)."<br>";
-				echo "step_data+1: ".$this->reprStepData($step_data, $step+1)."<br>";
-				echo "----<br>";
-
-			}
-		}
-
-		return $game;
-	}
-
-
-	function addRound(&$game, &$valid_rounds, &$this_step)
-	{
-		foreach($valid_rounds as $k => $v)
-		{
-			if(!in_array($k, $this_step["already_tried"]) && !in_array($k, $this_step["unviable_nodes"]))$usables[]=$k;	
-		}
-
-		if(!$usables) return false;
-
-		$random_index = rand(0, count($usables)-1);
-
-		$round_index = $usables[$random_index];
-
-		//$valid_rounds[$round_index]["usable"] = false;
-		$game[] = $round_index;
-		
-		//$this_step["already_tried"][] = $round_index;
-		//$this->markRoundsInvalidFromRound($valid_rounds, $valid_rounds[$round_index], $this_step);
-
-
-		return true;
-
-	}
-
-	function backTrackStep($step, &$valid_rounds, &$step_data, &$game)
-	{
-		$bad_round = array_pop($game);
-		$step_data[$step-1]["unviable_nodes"][] = $bad_round;
-
-		//echo "backtrac step: {$step}<br>";
-		$step_data[$step]["already_tried"] = array();
-	}
-
-	/*function markRoundsInvalidFromRound(&$rounds, $choosen_round, &$this_step)
-	{
-		foreach($rounds as $round_index => &$round)
-		{
-			foreach($round["pairs"] as $one_pair)
-			{
-				foreach($choosen_round["pairs"] as $pair)
-				{
-					if($this->pairEquals($one_pair, $pair) && $round["usable"])
-					{
-						$round["usable"] = false;
-						$this_step["marked_used"][] = $round_index;
-					} 	
-				}
-				
-			}
-		}
-
-
-	}*/
-
-
-	function reprStepData($array, $step)
-	{
-		
-		$str = "";
-		foreach($array[$step] as $ind => $vals)
-		{
-				
-			if($vals)
-				{
-					$str.="$ind: [";
-					foreach($vals as $val)$str.="$val,";
-					$str= substr_replace($str, "", -1)."], ";
-				}
-			}
-
-			$str= substr_replace($str, "", -2);
-			$str.="], ";
-			
-		
-		$str= substr_replace($str, "", -2);
-
-		$str.=")";
-		return $str;
-	}
-
 
 
 	
