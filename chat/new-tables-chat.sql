@@ -95,9 +95,8 @@ CREATE TABLE IF NOT EXISTS `ajax_chat_online` (
 -- Estructura de tabla para la tabla `seen_pairs`
 --
 
-CREATE TABLE IF NOT EXISTS `seen_pairs` (
-  `one` int(11) NOT NULL,
-  `other` int(11) NOT NULL
+CREATE TABLE IF NOT EXISTS `current_round_data` (
+  `data` text NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
