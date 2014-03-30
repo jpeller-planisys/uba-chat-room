@@ -1178,9 +1178,13 @@ var ajaxChat = {
 //					menu	+= '<li><a href="javascript:ajaxChat.sendMessageWrapper(\'/bans\');">'
 //							+ this.lang['userMenuBans']
 //							+ '</a></li>';
+					menu	+= '<li><a href="javascript:ajaxChat.sendMessageWrapper(\'/init_game\');">'
+							+ this.lang['startGame']
+							+ '</a></li>';
 					menu	+= '<li><a href="javascript:ajaxChat.sendMessageWrapper(\'/round\');">'
 							+ this.lang['startChatRound']
 							+ '</a></li>';
+
 				}
 			}
 		}

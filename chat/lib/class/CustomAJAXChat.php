@@ -199,37 +199,29 @@ class CustomAJAXChat extends AJAXChat {
 		// ChannelName => ChannelID
 		return array_flip($channels);
 	}
-	
 
-	function insertParsedMessageRound($textParts) {
-
-		$text = '/round';
+	function initializeGame($textParts)
+	{
 		$usersData = $this->getOnlineUsersData();
-		/*Array
-		(
-		    [0] => Array
-		        (
-		            [userID] => 1
-		            [userName] => admin
-		            [userRole] => 3
-		            [channel] => 0
-		            [timeStamp] => 1395860965
-		            [ip] => 127.0.0.1
-		            [channelSwitch] => 0
-		            [newChannel] => 0
-		        )
-
-		    [1] => Array
-		        (
-		            [userID] => 2
-		            [userName] => usaurio
-		            [userRole] => 1
-		            [channel] => 0
-		            [timeStamp] => 1395860968
-		            [ip] => 127.0.0.1
-		            [channelSwitch] => 0
-		            [newChannel] => 0
-		)*/
+		$ids = array();
+		foreach($usersData as $userData)
+			if($userData["userName"] != "admin")
+				$ids[] = $userData["userID"];
+		
+		$pairCombinator = new PairHandler($this->db);
+		if($res = $pairCombinator->initializeFor($ids))
+		{
+			$text = '/init_game_ok';
+			$this->insertChatBotMessage(
+				$this->getPrivateMessageID(),
+				$text
+			);
+			return true;
+		} 
+		else
+		{
+			return false;	
+		} 
 
 		if(count($usersData) % 2 != 1 )
 		{
@@ -239,30 +231,38 @@ class CustomAJAXChat extends AJAXChat {
 				$text
 			);
 		}
+
+	}
+
+	
+
+	function insertParsedMessageRound($textParts) {
+
+		$text = '/round';
+		$usersData = $this->getOnlineUsersData();
+		
+		foreach($usersData as $userData)
+				$usersDataByID[$userData["userID"]] = $userData;
+		
+		$pairCombinator = new PairHandler($this->db);
+		if(($round = $pairCombinator->getNextRound()) !== false)
+		{
+			foreach($round as $pair)
+			{
+				//$this->createChannel();
+				$this->switchOtherUsersChannel("Tema_1", $usersDataByID[$pair[0]]);
+				$this->switchOtherUsersChannel("Tema_1", $usersDataByID[$pair[1]]);	
+			}	
+		}
 		else
 		{
-			$pairHandler = new PairHandler($this->db);
-			if($pairs = $this->generateRoundPairs($usersData))
-			{
-				//print_r($pairs);
-				foreach($pairs as $pair)
-				{
-					//$this->createChannel();
-					$this->switchOtherUsersChannel("Tema_1", $usersData[$pair[0]]);
-					$this->switchOtherUsersChannel("Tema_1", $usersData[$pair[1]]);	
-				}	
-			}
-			else
-			{
-				$text = '/error ExhaustedCombinations '.(count($usersData)-1);
+			$text = '/error ExhaustedCombinations '.(count($usersData)-1);
 				$this->insertChatBotMessage(
 				$this->getPrivateMessageID(),
 				$text
 				);		
-			}
-
-			
-			
+		
+		
 		}
 		
 		//$this->switchChannel("Tema_1");
@@ -400,6 +400,27 @@ class CustomAJAXChat extends AJAXChat {
 		);
 
 		$this->_requestVars['lastID'] = 0;*/
+	}
+
+	// Override to add custom commands:
+	// Return true if a custom command has been successfully parsed, else false
+	// $text contains the whole message, $textParts the message split up as words array
+	function parseCustomCommands($text, $textParts)
+	{
+
+		switch($textParts[0])
+		{
+			case '/round':
+				$this->insertParsedMessageRound($textParts);
+			break;
+
+			case '/init_game':
+				$this->initializeGame($textParts);
+				return true;
+			break;
+				
+		}
+
 	}
 
 }

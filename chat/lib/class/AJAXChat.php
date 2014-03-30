@@ -775,10 +775,6 @@ class AJAXChat {
 					$this->insertParsedMessageWhois($textParts);
 					break;
 
-				case '/round':
-					$this->insertParsedMessageRound($textParts);
-					break;
-				
 				// Rolling dice:
 				case '/roll':				
 					$this->insertParsedMessageRoll($textParts);
