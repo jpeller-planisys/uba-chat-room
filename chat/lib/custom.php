@@ -8,4 +8,17 @@
  */
 
 // Include custom libraries and initialization code here
+
+require(AJAX_CHAT_PATH.'uba/PairHandler.php');
+require(AJAX_CHAT_PATH.'uba/Log.php');
+require(AJAX_CHAT_PATH.'uba/Combinatorics.php');
+
+function pre($val, $msg = "")
+{
+	echo ($msg?"$msg:":"")."<pre>";
+	print_r($val);
+	echo "</pre>";
+}
+
+
 ?>
