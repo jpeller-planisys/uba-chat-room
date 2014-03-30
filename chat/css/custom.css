@@ -13,13 +13,43 @@
 #content #chatList {
 	top:185px;
 	/*width:70%;*/
-	/*right:300px;*/
+	right:290px;
 }
+
+#content #onlineListContainer {
+	top:185px;
+	/*width:300px;*/
+
+}
+
+.ui-widget-content {
+	border: 1px solid #aaaaaa;
+	background: #ff0000; /*url(images/ui-bg_flat_75_ffffff_40x100.png) 50% 50% repeat-x;*/
+}
+.ui-widget-header
+{
+	background: #00ff00; /* url(images/ui-bg_highlight-soft_75_cccccc_1x100.png) 50% 50% repeat-x;*/
+}
+
+#content #opinionBarContainer
+{
+	top:185px;
+	position:absolute;
+	right:230px;
+	border-color:#0066B9;
+	bottom: 150px;
+	border-width: 1px;
+	border-style: solid;
+	width:50px;
+	text-align:center;
+}
+
+
+
 
 #content #logoutChannelContainer{
 	top:150px;
 		
-
 }
 
 #content #messageContainer {
@@ -38,11 +68,6 @@
 	
 }
 
-#content #onlineListContainer {
-	top:185px;
-	/*width:300px;*/
-
-}
 #content #helpContainer{
 	top:0px;
 }

@@ -24,16 +24,6 @@ require(AJAX_CHAT_PATH.'lib/classes.php');
 
 
 
-function pre($val, $msg = "")
-{
-	echo ($msg?"$msg:":"")."<pre>";
-	print_r($val);
-	echo "</pre>";
-}
-//echo "<pre>";
-
-
-
 // Initialize the chat:
 $ajaxChat = new CustomAJAXChat();
 

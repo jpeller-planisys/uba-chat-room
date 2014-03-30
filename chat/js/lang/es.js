@@ -9,6 +9,7 @@
 
 // Ajax Chat language Object:
 var ajaxChatLang = {
+	startGame: 'Crear set de rondas',
 	startChatRound : 'Lanzar ronda de chats',
 	login: '%s entra al Chat.',
 	logout: '%s sale del Chat.',
