@@ -134,10 +134,10 @@
 		</div>
 		<div id="logoutChannelContainer">
   			<input type="button" id="logoutButton" value="[LANG]logout[/LANG]" onclick="ajaxChat.logout();"/>
+			[OMIT]
 			<label for="channelSelection">[LANG]channel[/LANG]:</label>
-			
 			<select id="channelSelection" onchange="ajaxChat.switchChannel(this.options[this.selectedIndex].value);">[CHANNEL_OPTIONS/]</select>
-			
+			[/OMIT]
 			[OMIT]
 				<label for="styleSelection">[LANG]style[/LANG]:</label>
 				<select id="styleSelection" onchange="ajaxChat.setActiveStyleSheet(ajaxChat.getSelectedStyle());">[STYLE_OPTIONS/]</select>
