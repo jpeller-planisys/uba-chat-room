@@ -417,7 +417,7 @@ class CustomAJAXChat extends AJAXChat {
 					
 		$result = $this->db->query($sql);
 	
-		return $this->db->query("INSERT INTO `chat`.`opinion_changes` (`userID` ,`channelID` ,`value`,`before` ,`client_time` ,`server_time`) VALUES ('".$this->getUserID()."', '0', {$value}, ".$this->getUserData("opinionValue").", '{$client_time}', '".date("Y-m-d H:i:s")."')");
+		return $this->db->query("INSERT INTO `chat`.`opinion_changes` (`userID` ,`channelID` ,`value`,`before` ,`client_time` ,`server_time`) VALUES ('".$this->getUserID()."', '0', {$value}, ".$this->getUserData("opinionValue").", '{$client_time}', NOW())");
 	}
 		
 
