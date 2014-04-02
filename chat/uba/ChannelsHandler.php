@@ -22,23 +22,29 @@ class ChannelsHandler
 		return $channels;
 	}
 
-	function initializeFor($n)
+	function initializeFor($roundPairs)
 	{
-		return $this->createChannels($n/2);
+		$this->reset();
+		return $this->createChannels($roundPairs);
 	}
 
 
-	function createChannels($n)
+	function createChannels($roundPairs)
 	{
 		$this->reset();
 		$query = "INSERT INTO channels(id, name) VALUES";
-		for($i=1; $i <= $n; $i++) 
-			$query.="($i, 'Channel_".str_pad($i, 2, "0", STR_PAD_LEFT)."'),";
+		foreach($roundPairs as $pair)
+		{	
+			$id = str_pad($pair[0], 3, "0", STR_PAD_LEFT).str_pad($pair[1], 3, "0", STR_PAD_LEFT);
+			$query.="($id, 'Channel_{$id}'),";
+		}
+		
+		
 		
 
 		if($this->db->query(substr($query, 0, -1)))
 		{
-			return $this->getChannels();
+			return $this->getChannels($nameIndexed = false);
 		}
 	}
 

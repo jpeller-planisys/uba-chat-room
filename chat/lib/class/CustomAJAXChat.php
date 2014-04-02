@@ -210,9 +210,9 @@ class CustomAJAXChat extends AJAXChat {
 
 		
 		$pairCombinator = new PairHandler($this->db);
-		$channelsHandler = new ChannelsHandler($this->db);
 
-		if($pairCombinator->initializeFor($ids) && $channelsHandler->initializeFor(count($ids)))
+
+		if($pairCombinator->initializeFor($ids))
 		{
 			$text = '/init_game_ok';
 				$this->insertChatBotMessage(
@@ -241,7 +241,8 @@ class CustomAJAXChat extends AJAXChat {
 
 		if(($roundPairs = $pairCombinator->getNextRound()) !== false)
 		{
-			$channels = $channelsHandler->getChannels($nameIndexed = false);
+			
+			$channels = $channelsHandler->initializeFor($roundPairs);
 			$n = count($roundPairs);
 			if($n != count($channels)) 
 			{

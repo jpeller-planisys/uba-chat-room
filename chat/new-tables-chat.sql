@@ -101,7 +101,7 @@ CREATE TABLE IF NOT EXISTS `current_round_data` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE `channels` (
- `id` mediumint(9) NOT NULL AUTO_INCREMENT,
+ `id` mediumint(9) NOT NULL,
  `name` varchar(64) NOT NULL,
  PRIMARY KEY (`id`),
  UNIQUE KEY `name` (`name`)
