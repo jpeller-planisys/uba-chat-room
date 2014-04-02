@@ -576,6 +576,7 @@ class AJAXChat {
 		
 		$this->updateOnlineList();
 		
+		/*
 		// Channel leave message
 		$text = '/channelLeave '.$userName;
 		$this->insertChatBotMessage(
@@ -583,7 +584,7 @@ class AJAXChat {
 			$text,
 			null,
 			1
-		);
+		);*/
 
 		// Channel enter message
 		$text = '/channelEnter '.$userName;
