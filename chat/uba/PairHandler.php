@@ -26,7 +26,7 @@ class PairHandler
 
 	function setInternalDataStructure()
 	{
-		$this->internal_data = array("played_rounds" => array(), "game" => array());
+		$this->internal_data = array("played_rounds" => array(), "game" => array(), "rounds_data" => array());
 	}
 
 
