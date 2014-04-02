@@ -85,6 +85,7 @@ CREATE TABLE IF NOT EXISTS `ajax_chat_online` (
   `ip` varbinary(16) NOT NULL,
   `channelSwitch` tinyint(1) NOT NULL DEFAULT '0',
   `newChannel` int(11) NOT NULL,
+  `opinionValue` tinyint(4) NOT NULL DEFAULT '50',
   PRIMARY KEY (`userID`),
   KEY `userName` (`userName`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
@@ -106,6 +107,17 @@ CREATE TABLE `channels` (
  UNIQUE KEY `name` (`name`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+
+CREATE TABLE `opinion_changes` (
+ `id` int(11) NOT NULL AUTO_INCREMENT,
+ `userID` int(11) NOT NULL,
+ `channelID` int(11) NOT NULL,
+ `before` int(11) NOT NULL,
+ `value` int(11) NOT NULL,
+ `client_time` datetime NOT NULL,
+ `server_time` datetime NOT NULL,
+ PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;

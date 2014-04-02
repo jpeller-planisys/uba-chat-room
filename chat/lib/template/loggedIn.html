@@ -17,18 +17,24 @@
   <script src="//code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
   <link rel="stylesheet" href="//code.jquery.com/ui/1.10.4/resources/demos/style.css" />
   <script>
-  //http://jqueryui.com/slider/
+
+	
+	  //http://jqueryui.com/slider/
   $(function() {
     $( "#slider-vertical" ).slider({
       orientation: "vertical",
       range: "min",
+      step: 5,
       min: 0,
       max: 100,
-      value: 50,
+      value: [OPINION_VALUE/],
       slide: function( event, ui ) {
+
+        ajaxChat.sendMessage("/opinion_change "+ui.value+" "+ajaxChat.getDatetime());
         $( "#amount" ).val( ui.value );
       }
     });
+
     $( "#amount" ).val( $( "#slider-vertical" ).slider( "value" ) );
   });
   </script>

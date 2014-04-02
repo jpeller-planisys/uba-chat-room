@@ -8,7 +8,7 @@ class PairHandler
 
 	var $seen_pairs = null;
 
-	var $internal_data = array();
+	var $internal_data = null;
 	function __construct($in_db)
 	{
 		$this->db = $in_db;
@@ -17,10 +17,27 @@ class PairHandler
 
 		if($aux)
 			$this->internal_data = json_decode($aux["data"], true);
+		else
+		{
+			$this->setInternalDataStructure();
+		}
+			
+	}
+
+	function setInternalDataStructure()
+	{
+		$this->internal_data = array("played_rounds" => array(), "game" => array());
+	}
+
+
+	function dumpToResults()
+	{
+
 	}
 
 	function reset()
 	{
+		$this->dumpToResults();
 		$result = $this->db->query("DELETE FROM current_round_data;");
 		return true;
 	}
@@ -39,13 +56,13 @@ class PairHandler
 
 	function getPlayedRounds()
 	{
-		return $this->internal_data["played_rounds"]? $this->internal_data["played_rounds"] : array();
+		return $this->internal_data["played_rounds"];
 
 	}
 
 	function getAllRounds()
 	{
-		return ($this->internal_data["game"]? array_keys($this->internal_data["game"]) : array());
+		return array_keys($this->internal_data["game"]);
 	}
 
 	function addPlayedRound($index)

@@ -41,3 +41,8 @@ ajaxChat.replaceCommandInitGameOk = function(textParts) {
 				+ "Los rounds ya están calculados. Pueden comenzar las rondas!"
 				+ '</span>';		
 }
+
+ajaxChat.getDatetime = function()
+{
+	return '2200-10-10 23:00:00';
+}

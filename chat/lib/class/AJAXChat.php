@@ -2357,12 +2357,18 @@ class AJAXChat {
 		}
 	}
 
-	function getUserData()
+	function getUserData($key = false)
 	{
 		$allData = $this->getOnlineUsersData();
 		foreach($allData as $aUserData)
 		{
-			if($aUserData["userID"] == $this->getUserID()) return $aUserData;
+			if($aUserData["userID"] == $this->getUserID())
+			{
+				if(!$key)
+					return $aUserData;	
+				else
+					foreach($aUserData as $k =>$v) if($k == $key) return $v;
+			} 
 		}
 
 		return false;
@@ -2430,7 +2436,8 @@ class AJAXChat {
 						UNIX_TIMESTAMP(dateTime) AS timeStamp,
 						ip,
 						channelSwitch,
-						newChannel
+						newChannel,
+						opinionValue
 					FROM
 						'.$this->getDataBaseTable('online').'
 					ORDER BY

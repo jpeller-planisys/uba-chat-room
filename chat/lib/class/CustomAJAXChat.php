@@ -259,10 +259,11 @@ class CustomAJAXChat extends AJAXChat {
 		}
 		else
 		{
-			$text = '/error ExhaustedCombinations '.(count($usersData)-1);
-			$this->insertChatBotMessage($this->getPrivateMessageID(),$text);		
 			$channelsHandler->reset();
 			$pairCombinator->reset();
+			$text = '/error ExhaustedCombinations '.(count($usersData)-1);
+			$this->insertChatBotMessage($this->getPrivateMessageID(),$text);		
+			
 		
 		
 		}
@@ -319,13 +320,7 @@ class CustomAJAXChat extends AJAXChat {
 					userID = '.$this->db->makeSafe($otherUser["userID"]).';';
 					
 		// Create a new SQL query:
-		$result = $this->db->sqlQuery($sql);
-		
-		// Stop if an error occurs:
-		if($result->error()) {
-			echo $result->getError();
-			die();
-		}
+		$result = $this->db->query($sql);
 		
 		$this->resetOnlineUsersData();
 	}
@@ -397,6 +392,34 @@ class CustomAJAXChat extends AJAXChat {
 		$this->_requestVars['lastID'] = 0;*/
 	}
 
+	// Override to replace custom template tags:
+	// Return the replacement for the given tag (and given tagContent)	
+	function replaceCustomTemplateTags($tag, $tagContent) {
+		switch($tag)
+		{
+			case 'OPINION_VALUE':
+				$val =  $this->getUserData("opinionValue");
+				if($val !== false) return $val;
+				else return 50;
+			break;
+		}
+	}
+
+	function addOpinionChange($value, $client_time)
+	{
+		$sql = 'UPDATE
+					'.$this->getDataBaseTable('online').'
+				SET
+					opinionValue 	= '.$value.'
+				WHERE
+					userID = '.$this->db->makeSafe($this->getUserID()).';';
+					
+		$result = $this->db->query($sql);
+	
+		return $this->db->query("INSERT INTO `chat`.`opinion_changes` (`userID` ,`channelID` ,`value`,`before` ,`client_time` ,`server_time`) VALUES ('".$this->getUserID()."', '0', {$value}, ".$this->getUserData("opinionValue").", '{$client_time}', '".date("Y-m-d H:i:s")."')");
+	}
+		
+
 	// Override to add custom commands:
 	// Return true if a custom command has been successfully parsed, else false
 	// $text contains the whole message, $textParts the message split up as words array
@@ -412,6 +435,12 @@ class CustomAJAXChat extends AJAXChat {
 
 			case '/init_game':
 				$this->initializeGame($textParts);
+				return true;
+			break;
+
+			case '/opinion_change':
+				$this->addOpinionChange($textParts[1], $textParts[2]." ".$textParts[3]);
+				$this->insertChatBotMessage($this->getPrivateMessageID(),"Cambiaste de opinion a {$textParts[1]} en momento".$textParts[2]." ".$textParts[3]);		
 				return true;
 			break;
 				
