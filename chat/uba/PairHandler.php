@@ -32,13 +32,28 @@ class PairHandler
 
 	function dumpToResults()
 	{
+		$obj = new stdClass();
+		$obj->played_rounds = $this->internal_data["played_rounds"];
+		$obj->game = $this->internal_data["game"];
+		$obj->opinion_changes = $this->db->getAssoc("SELECT * FROM opinion_changes");
+		$obj->messages = $this->db->getAssoc("SELECT * FROM ajax_chat_messages");
+		$obj->users = $this->db->getAssoc("SELECT * FROM ajax_chat_online");
+		$this->db->query("INSERT INTO results(`data`) VALUES('".json_encode($obj)."')");
+	}
 
+	function saveAndReset()
+	{
+
+		$this->dumpToResults();
+		$this->reset();
 	}
 
 	function reset()
 	{
-		$this->dumpToResults();
+		
 		$result = $this->db->query("DELETE FROM current_round_data;");
+		$result = $this->db->query("DELETE FROM opinion_changes;");
+		$result = $this->db->query("DELETE FROM ajax_chat_messages;");
 		return true;
 	}
 
@@ -74,6 +89,8 @@ class PairHandler
 	function getNextRound()
 	{
 		$played = $this->getPlayedRounds();
+
+
 		$all = $this->getAllRounds();
 		$available = array_values(array_diff($all, $played));
 		

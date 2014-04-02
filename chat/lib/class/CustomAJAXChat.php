@@ -261,7 +261,7 @@ class CustomAJAXChat extends AJAXChat {
 		else
 		{
 			$channelsHandler->reset();
-			$pairCombinator->reset();
+			$pairCombinator->saveAndReset();
 			$text = '/error ExhaustedCombinations '.(count($usersData)-1);
 			$this->insertChatBotMessage($this->getPrivateMessageID(),$text);		
 			
