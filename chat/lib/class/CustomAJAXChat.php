@@ -200,7 +200,7 @@ class CustomAJAXChat extends AJAXChat {
 		
 		if(count($ids) % 2 !== 0 )
 		{
-			$text = '/error InvalidCountUsers '.(count($ids)-1);
+			$text = '/error InvalidCountUsers '.(count($ids));
 			$this->insertChatBotMessage(
 				$this->getPrivateMessageID(),
 				$text
