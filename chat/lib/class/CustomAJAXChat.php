@@ -122,34 +122,26 @@ class CustomAJAXChat extends AJAXChat {
 	// Store the channels the current user has access to
 	// Make sure channel names don't contain any whitespace
 	function &getChannels() {
-		if($this->_channels === null) {
-			$this->_channels = array();
-			
-			$customUsers = $this->getCustomUsers();
-			
-			// Get the channels, the user has access to:
-			if($this->getUserRole() == AJAX_CHAT_GUEST) {
-				$validChannels = $customUsers[0]['channels'];
-			} else {
-				//$validChannels = $customUsers[$this->getUserID()]['channels'];
-				$validChannels = array(0,1,2);
+		$this->_channels = array();
+		
+		$customUsers = $this->getCustomUsers();
+		
+		
+		// Add the valid channels to the channel list (the defautlChannelID is always valid):
+		foreach($this->getAllChannels() as $key=>$value) {
+			if ($value == $this->getConfig('defaultChannelID')) {
+				$this->_channels[$key] = $value;
+				continue;
+			}
+			// Check if we have to limit the available channels:
+			if($this->getConfig('limitChannelList') && !in_array($value, $this->getConfig('limitChannelList'))) {
+				continue;
 			}
 			
-			// Add the valid channels to the channel list (the defaultChannelID is always valid):
-			foreach($this->getAllChannels() as $key=>$value) {
-				if ($value == $this->getConfig('defaultChannelID')) {
-					$this->_channels[$key] = $value;
-					continue;
-				}
-				// Check if we have to limit the available channels:
-				if($this->getConfig('limitChannelList') && !in_array($value, $this->getConfig('limitChannelList'))) {
-					continue;
-				}
-				if(in_array($value, $validChannels)) {
-					$this->_channels[$key] = $value;
-				}
-			}
+			$this->_channels[$key] = $value;
+			
 		}
+		
 		return $this->_channels;
 	}
 
@@ -157,6 +149,7 @@ class CustomAJAXChat extends AJAXChat {
 	// Make sure channel names don't contain any whitespace
 	function &getAllChannels() {
 		// Get all existing channels:
+		$this->_allChannels = array();
 		$customChannels = $this->getCustomChannels();
 			
 		$defaultChannelFound = false;
@@ -192,8 +185,8 @@ class CustomAJAXChat extends AJAXChat {
 	}
 	
 	function getCustomChannels() {
-		// List containing the custom channels:
-		return ChannelsHandler::getChannels();
+		$channelsHandler = new ChannelsHandler($this->db);
+		return $channelsHandler->getChannels();
 	}
 
 	function initializeGame($textParts)
