@@ -12,6 +12,7 @@
 require(AJAX_CHAT_PATH.'uba/PairHandler.php');
 require(AJAX_CHAT_PATH.'uba/Log.php');
 require(AJAX_CHAT_PATH.'uba/Combinatorics.php');
+require(AJAX_CHAT_PATH.'uba/ChannelsHandler.php');
 
 function pre($val, $msg = "")
 {

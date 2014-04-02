@@ -156,33 +156,33 @@ class CustomAJAXChat extends AJAXChat {
 	// Store all existing channels
 	// Make sure channel names don't contain any whitespace
 	function &getAllChannels() {
-		if($this->_allChannels === null) {
-			// Get all existing channels:
-			$customChannels = $this->getCustomChannels();
+		// Get all existing channels:
+		$customChannels = $this->getCustomChannels();
 			
-			$defaultChannelFound = false;
-			
-			foreach($customChannels as $name=>$id) {
-				$this->_allChannels[$this->trimChannelName($name)] = $id;
-				if($id == $this->getConfig('defaultChannelID')) {
-					$defaultChannelFound = true;
-				}
-			}
-			
-			if(!$defaultChannelFound) {
-				// Add the default channel as first array element to the channel list
-				// First remove it in case it appeard under a different ID
-				unset($this->_allChannels[$this->getConfig('defaultChannelName')]);
-				$this->_allChannels = array_merge(
-					array(
-						$this->trimChannelName($this->getConfig('defaultChannelName'))=>$this->getConfig('defaultChannelID')
-					),
-					$this->_allChannels
-				);
+		$defaultChannelFound = false;
+		
+		foreach($customChannels as $name=>$id) {
+			$this->_allChannels[$this->trimChannelName($name)] = $id;
+			if($id == $this->getConfig('defaultChannelID')) {
+				$defaultChannelFound = true;
 			}
 		}
+		
+		if(!$defaultChannelFound) {
+			// Add the default channel as first array element to the channel list
+			// First remove it in case it appeard under a different ID
+			unset($this->_allChannels[$this->getConfig('defaultChannelName')]);
+			$this->_allChannels = array_merge(
+				array(
+					$this->trimChannelName($this->getConfig('defaultChannelName'))=>$this->getConfig('defaultChannelID')
+				),
+				$this->_allChannels
+			);
+		}
+		
 		return $this->_allChannels;
 	}
+
 
 	function &getCustomUsers() {
 		// List containing the registered chat users:
@@ -193,11 +193,7 @@ class CustomAJAXChat extends AJAXChat {
 	
 	function getCustomChannels() {
 		// List containing the custom channels:
-		$channels = null;
-		require(AJAX_CHAT_PATH.'lib/data/channels.php');
-		// Channel array structure should be:
-		// ChannelName => ChannelID
-		return array_flip($channels);
+		return ChannelsHandler::getChannels();
 	}
 
 	function initializeGame($textParts)
@@ -412,6 +408,7 @@ class CustomAJAXChat extends AJAXChat {
 		{
 			case '/round':
 				$this->insertParsedMessageRound($textParts);
+				return true;
 			break;
 
 			case '/init_game':
