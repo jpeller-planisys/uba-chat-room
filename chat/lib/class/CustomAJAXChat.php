@@ -210,15 +210,13 @@ class CustomAJAXChat extends AJAXChat {
 
 		
 		$pairCombinator = new PairHandler($this->db);
-
-
+		$channelsHandler = new ChannelsHandler($this->db);
+		$channelsHandler->reset();
 		if($pairCombinator->initializeFor($ids))
 		{
-			$text = '/init_game_ok';
-				$this->insertChatBotMessage(
-					$this->getPrivateMessageID(),
-					$text
-			);
+
+			$this->insertChatBotMessage( $this->getPrivateMessageID(), '/init_game_ok');
+			$this->insertChatBotMessage("0","Este es el canal público del experimento. Lanzaremos chats aleatorios entre ustedes. Etc. El experimento está a punto de comenzar.");		
 			return true;	
 		}		
 
@@ -266,6 +264,7 @@ class CustomAJAXChat extends AJAXChat {
 			$pairCombinator->saveAndReset();
 			$text = '/error ExhaustedCombinations '.(count($usersData)-1);
 			$this->insertChatBotMessage($this->getPrivateMessageID(),$text);		
+			$this->insertChatBotMessage("0","El experimento termino");
 			
 			return false;
 		
