@@ -228,9 +228,8 @@ class CustomAJAXChat extends AJAXChat {
 
 	
 
-	function insertParsedMessageRound($textParts) {
+	function launchNewRound($textParts) {
 
-		$text = '/round';
 		$usersData = $this->getOnlineUsersData();
 		
 		foreach($usersData as $userData)
@@ -248,13 +247,16 @@ class CustomAJAXChat extends AJAXChat {
 			{
 				return false;
 			}
+			$current_round = $pairCombinator->currentRound();
 
 			for($i=0; $i < $n; $i++) { 
-				$this->switchOtherUsersChannel($channels[$i], $usersDataByID[$roundPairs[$i][0]]);
-				$this->switchOtherUsersChannel($channels[$i], $usersDataByID[$roundPairs[$i][1]]);	
+				$this->insertChatBotMessage($channels[$i]["id"],"Bienvenidos a la ronda numero {$current_round}, conversaran entre ".$usersDataByID[$roundPairs[$i][0]]["userName"]."  y ".$usersDataByID[$roundPairs[$i][1]]["userName"]	." durate x minutos");		
+				$this->switchOtherUsersChannel($channels[$i]["name"], $usersDataByID[$roundPairs[$i][0]]);
+				$this->switchOtherUsersChannel($channels[$i]["name"], $usersDataByID[$roundPairs[$i][1]]);	
 			}
 
-			$this->insertChatBotMessage($this->getPrivateMessageID(),"/round_ok");		
+			//$this->insertChatBotMessage($this->getPrivateMessageID(),"/round_ok");		
+			return $current_round;
 
 			
 		}
@@ -265,7 +267,7 @@ class CustomAJAXChat extends AJAXChat {
 			$text = '/error ExhaustedCombinations '.(count($usersData)-1);
 			$this->insertChatBotMessage($this->getPrivateMessageID(),$text);		
 			
-		
+			return false;
 		
 		}
 		
@@ -373,7 +375,7 @@ class CustomAJAXChat extends AJAXChat {
 		$this->updateOtherUsersOnlineList($otherUser);
 		
 		// Channel leave message
-		/*$text = '/channelLeave '.$userName;
+		/*$text = '/resetOnlineUsersData '.$userName;
 		$this->insertChatBotMessage(
 			$oldChannel,
 			$text,
@@ -430,7 +432,10 @@ class CustomAJAXChat extends AJAXChat {
 		switch($textParts[0])
 		{
 			case '/round':
-				$this->insertParsedMessageRound($textParts);
+				$currentRound = $this->launchNewRound($textParts);
+				if($currentRound !== false)
+					$this->insertChatBotMessage("0","Comienza la ronda ".$currentRound);		
+				
 				return true;
 			break;
 
@@ -441,7 +446,7 @@ class CustomAJAXChat extends AJAXChat {
 
 			case '/opinion_change':
 				$this->addOpinionChange($textParts[1], $textParts[2]." ".$textParts[3]);
-				$this->insertChatBotMessage($this->getPrivateMessageID(),"Cambiaste de opinion a {$textParts[1]} en momento".$textParts[2]." ".$textParts[3]);		
+				//$this->insertChatBotMessage($this->getPrivateMessageID(),"Cambiaste de opinion a {$textParts[1]} en momento".$textParts[2]." ".$textParts[3]);		
 				return true;
 			break;
 				

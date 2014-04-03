@@ -43,7 +43,6 @@ class PairHandler
 
 	function saveAndReset()
 	{
-
 		$this->dumpToResults();
 		$this->reset();
 	}
@@ -106,6 +105,11 @@ class PairHandler
 
 		return $this->internal_data["game"][$available[$index]];
 
+	}
+
+	function currentRound()
+	{
+		return count($this->internal_data["played_rounds"]);
 	}
 
 

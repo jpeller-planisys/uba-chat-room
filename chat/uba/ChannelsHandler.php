@@ -15,7 +15,7 @@ class ChannelsHandler
 		foreach($this->db->getAssoc("SELECT id, name FROM channels") as $db_item)
 		{
 			if($nameIndexed)$channels[ $db_item["name"]] = $db_item["id"];
-			else $channels[] = $db_item["name"];
+			else $channels[] = $db_item;
 		}
 			
 		
