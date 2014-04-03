@@ -448,9 +448,27 @@ class CustomAJAXChat extends AJAXChat {
 				//$this->insertChatBotMessage($this->getPrivateMessageID(),"Cambiaste de opinion a {$textParts[1]} en momento".$textParts[2]." ".$textParts[3]);		
 				return true;
 			break;
+
+			case '/restart_clock':
+				$this->insertChatBotMessageInAllChannels("/restart_clock");
+				return true;
 				
 		}
 
+	}
+
+	function insertChatBotMessageInAllChannels($message)
+	{
+		$channelsHandler = new ChannelsHandler($this->db);
+
+		$channels = $channelsHandler->getChannels($nameIndexed = false);
+		
+		foreach($channels as $channel)
+		{
+			$this->insertChatBotMessage($channel["id"], $message);
+		}
+		$this->insertChatBotMessage("0", $message);
+			
 	}
 
 }

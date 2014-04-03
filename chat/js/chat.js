@@ -1107,6 +1107,7 @@ var ajaxChat = {
 				menu	+= '<li><a href="javascript:ajaxChat.sendMessageWrapper(\'/round\');">'
 						+ this.lang['startChatRound']
 						+ '</a></li>';
+						menu	+= '<li><a href="javascript:ajaxChat.sendMessageWrapper(\'/restart_clock\');">Reiniciar clock</a></li>';
 
 			}
 		}
