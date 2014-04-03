@@ -1095,97 +1095,19 @@ var ajaxChat = {
 	getUserNodeStringItems: function(encodedUserName, userID, isInline) {
 		var menu;
 		if(encodedUserName !== this.encodedUserName) {
-			menu 	= '<li><a href="javascript:ajaxChat.insertMessageWrapper(\'/msg '
-					+ encodedUserName
-					+ ' \');">'
-					+ this.lang['userMenuSendPrivateMessage']
-					+ '</a></li>'
-//					+ '<li><a href="javascript:ajaxChat.insertMessageWrapper(\'/describe '
-//					+ encodedUserName
-//					+ ' \');">'
-//					+ this.lang['userMenuDescribe']
-//					+ '</a></li>'
-					+ '<li><a href="javascript:ajaxChat.sendMessageWrapper(\'/query '
-					+ encodedUserName
-					+ '\');">'
-					+ this.lang['userMenuOpenPrivateChannel']
-					+ '</a></li>'
-					+ '<li><a href="javascript:ajaxChat.sendMessageWrapper(\'/query\');">'
-					+ this.lang['userMenuClosePrivateChannel']
-					+ '</a></li>'
-					+ '<li><a href="javascript:ajaxChat.sendMessageWrapper(\'/ignore '
-					+ encodedUserName
-					+ '\');">'
-					+ this.lang['userMenuIgnore']
-					+ '</a></li>';
-			if (isInline) {
-				menu	+= '<li><a href="javascript:ajaxChat.sendMessageWrapper(\'/invite '
-					+ encodedUserName
-					+ '\');">'
-					+ this.lang['userMenuInvite']
-					+ '</a></li>'
-					+ '<li><a href="javascript:ajaxChat.sendMessageWrapper(\'/uninvite '
-					+ encodedUserName
-					+ '\');">'
-					+ this.lang['userMenuUninvite']
-					+ '</a></li>'
-					+ '<li><a href="javascript:ajaxChat.sendMessageWrapper(\'/whereis '
-					+ encodedUserName
-					+ '\');">'
-					+ this.lang['userMenuWhereis']
-					+ '</a></li>';
-			}
-			if(this.userRole === '2' || this.userRole === '3') {
-				menu	+= '<li><a href="javascript:ajaxChat.insertMessageWrapper(\'/kick '
-						+ encodedUserName
-						+ ' \');">'
-						+ this.lang['userMenuKick']
-						+ '</a></li>'
-						+ '<li><a href="javascript:ajaxChat.sendMessageWrapper(\'/whois '
-						+ encodedUserName
-						+ '\');">'
-						+ this.lang['userMenuWhois']
-						+ '</a></li>';
-			}
-		} else {
+			menu = '';
+		} 
+		else 
+		{
 			menu 	= '';
-//					'<li><a href="javascript:ajaxChat.sendMessageWrapper(\'/quit\');">'
-//					+ this.lang['userMenuLogout']
-//					+ '</a></li>'
-//					+ '<li><a href="javascript:ajaxChat.sendMessageWrapper(\'/who\');">'
-//					+ this.lang['userMenuWho']
-//					+ '</a></li>'
-//					+ '<li><a href="javascript:ajaxChat.sendMessageWrapper(\'/ignore\');">'
-//					+ this.lang['userMenuIgnoreList']
-//					+ '</a></li>'
-//					+ '<li><a href="javascript:ajaxChat.sendMessageWrapper(\'/list\');">'
-//					+ this.lang['userMenuList']
-//					+ '</a></li>'
-//					+ '<li><a href="javascript:ajaxChat.insertMessageWrapper(\'/action \');">'
-//					+ this.lang['userMenuAction']
-//					+ '</a></li>'
-//					+ '<li><a href="javascript:ajaxChat.insertMessageWrapper(\'/roll \');">'
-//					+ this.lang['userMenuRoll']
-//					+ '</a></li>'
-//					+ '<li><a href="javascript:ajaxChat.insertMessageWrapper(\'/nick \');">'
-//					+ this.lang['userMenuNick']
-//					+ '</a></li>';
-			if(this.userRole === '1' || this.userRole === '2' || this.userRole === '3') {
-				menu	+= '<li><a href="javascript:ajaxChat.sendMessageWrapper(\'/join\');">'
-						+ this.lang['userMenuEnterPrivateRoom']
+			if(this.userRole === '2' || this.userRole === '3') { //admin y moderadores
+				menu	+= '<li><a href="javascript:ajaxChat.sendMessageWrapper(\'/init_game\');">'
+						+ this.lang['startGame']
 						+ '</a></li>';
-				if(this.userRole === '2' || this.userRole === '3') { //admin y moderadores
-//					menu	+= '<li><a href="javascript:ajaxChat.sendMessageWrapper(\'/bans\');">'
-//							+ this.lang['userMenuBans']
-//							+ '</a></li>';
-					menu	+= '<li><a href="javascript:ajaxChat.sendMessageWrapper(\'/init_game\');">'
-							+ this.lang['startGame']
-							+ '</a></li>';
-					menu	+= '<li><a href="javascript:ajaxChat.sendMessageWrapper(\'/round\');">'
-							+ this.lang['startChatRound']
-							+ '</a></li>';
+				menu	+= '<li><a href="javascript:ajaxChat.sendMessageWrapper(\'/round\');">'
+						+ this.lang['startChatRound']
+						+ '</a></li>';
 
-				}
 			}
 		}
 		menu += this.getCustomUserMenuItems(encodedUserName, userID);
