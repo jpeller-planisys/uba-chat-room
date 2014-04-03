@@ -46,3 +46,33 @@ ajaxChat.getDatetime = function()
 {
 	return '2200-10-10 23:00:00';
 }
+
+ajaxChat.chronometer = function ()
+{
+	var today=new Date();
+	var h=today.getHours();
+	var m=today.getMinutes();
+	var s=today.getSeconds();
+	// add a zero in front of numbers<10
+	m=this.checkTime(m);
+	s=this.checkTime(s);
+	document.getElementById('chronometer').innerHTML = h+":"+m+":"+s;
+	t=setTimeout(function(){ajaxChat.chronometer()},500);
+}
+
+ajaxChat.checkTime = function (i)
+{
+
+	if (i<10)
+	  {
+	  i="0" + i;
+	  }
+	return i;
+}
+
+
+// Override to add custom initialization code
+	// This method is called on page load
+ajaxChat.customInitialize = function() {		
+	this.chronometer();
+}
