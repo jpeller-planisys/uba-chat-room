@@ -19,12 +19,11 @@ ajaxChat.replaceCustomCommands = function(text, textParts) {
 			return this.replaceCommandRound(textParts);
 		case '/restart_clock':
 			ajaxChat.restartChronometer(0);
-			return "restarteado!";
+			//return "restarteado!";
 		case '/start_opinion':
 			ajaxChat.startOpinion();
 			return false;
 		break;
-
 		case '/end_opinion':
 			ajaxChat.endOpinion();
 			return false;
@@ -117,9 +116,14 @@ ajaxChat.customOnNewMessage = function(dateObject, userID, userName, userRole, m
 	{
 		case '/end_opinion':
 		case '/start_opinion':
+		case '/restart_clock':
 			var textParts = messageText.split(' ');	
 			this.replaceCustomCommands(messageText, textParts);
 		 	return false;
+		break;
+
+		default:
+			return true;
 		break;
 	}
 	

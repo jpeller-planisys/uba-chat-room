@@ -211,7 +211,10 @@ class CustomAJAXChat extends AJAXChat {
 		
 		$pairCombinator = new PairHandler($this->db);
 		$channelsHandler = new ChannelsHandler($this->db);
+		
+		$pairCombinator->saveAndReset();
 		$channelsHandler->reset();
+
 		if($pairCombinator->initializeFor($ids))
 		{
 
@@ -248,6 +251,8 @@ class CustomAJAXChat extends AJAXChat {
 			$current_round = $pairCombinator->currentRound();
 
 			for($i=0; $i < $n; $i++) { 
+				$this->insertChatBotMessage($channels[$i]["id"], "/restart_clock");
+				$this->insertChatBotMessage($channels[$i]["id"], "/end_opinion");
 				$this->insertChatBotMessage($channels[$i]["id"],"Bienvenidos a la ronda numero {$current_round}, conversaran entre ".$usersDataByID[$roundPairs[$i][0]]["userName"]."  y ".$usersDataByID[$roundPairs[$i][1]]["userName"]	." durate x minutos");		
 				$this->switchOtherUsersChannel($channels[$i]["name"], $usersDataByID[$roundPairs[$i][0]]);
 				$this->switchOtherUsersChannel($channels[$i]["name"], $usersDataByID[$roundPairs[$i][1]]);	
@@ -392,7 +397,7 @@ class CustomAJAXChat extends AJAXChat {
 		);
 
 		$this->_requestVars['lastID'] = 0;*/
-	}
+	}	
 
 	// Override to replace custom template tags:
 	// Return the replacement for the given tag (and given tagContent)	
@@ -433,11 +438,22 @@ class CustomAJAXChat extends AJAXChat {
 			case '/round':
 				$currentRound = $this->launchNewRound($textParts);
 				if($currentRound !== false)
+				{
+					$this->insertChatBotMessage("0", "/restart_clock");
+					$this->insertChatBotMessage("0", "/end_opinion");					
 					$this->insertChatBotMessage("0","Comienza la ronda ".$currentRound);		
-				
+				}
+		
+				//$this->insertChatBotMessageInAllChannels("/end_opinion");
 				return true;
 			break;
 
+			case '/close_round':
+				$this->insertChatBotMessageInAllChannels("/restart_clock");
+				$this->insertChatBotMessageInAllChannels("/start_opinion");
+				$this->insertChatBotMessageInAllChannels("La ronda está terminando. Tienen X segundos para modificar sus opiniones.");
+				return true;
+			break;
 			case '/init_game':
 				$this->initializeGame($textParts);
 				return true;
