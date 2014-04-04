@@ -20,6 +20,17 @@ ajaxChat.replaceCustomCommands = function(text, textParts) {
 		case '/restart_clock':
 			ajaxChat.restartChronometer(0);
 			return "restarteado!";
+		case '/start_opinion':
+			ajaxChat.startOpinion();
+			return false;
+		break;
+
+		case '/end_opinion':
+			ajaxChat.endOpinion();
+			return false;
+		break;
+
+
 	}
 	
 	return text;
@@ -70,6 +81,16 @@ ajaxChat.chronometer = function (i)
 	this.timeout=setTimeout(function(){ajaxChat.chronometer(i+1)},1000);
 }
 
+ajaxChat.startOpinion = function ()
+{
+	$("#opinionBarContainer").css("display", "block");
+}
+
+ajaxChat.endOpinion = function ()
+{
+	$("#opinionBarContainer").css("display", "none");	
+}
+
 ajaxChat.checkTime = function (i)
 {
 
@@ -85,4 +106,22 @@ ajaxChat.checkTime = function (i)
 	// This method is called on page load
 ajaxChat.customInitialize = function() {		
 	this.chronometer(0);
+}
+
+
+ajaxChat.customOnNewMessage = function(dateObject, userID, userName, userRole, messageID, messageText, channelID, ip)
+{
+	console.log(channelID+" "+messageText);
+	
+	switch(messageText)
+	{
+		case '/end_opinion':
+		case '/start_opinion':
+			var textParts = messageText.split(' ');	
+			this.replaceCustomCommands(messageText, textParts);
+		 	return false;
+		break;
+	}
+	
+	return true;
 }

@@ -452,7 +452,13 @@ class CustomAJAXChat extends AJAXChat {
 			case '/restart_clock':
 				$this->insertChatBotMessageInAllChannels("/restart_clock");
 				return true;
-				
+			
+			case '/start_opinion':
+				$this->insertChatBotMessageInAllChannels("/start_opinion");
+				return true;				
+			case '/end_opinion':
+				$this->insertChatBotMessageInAllChannels("/end_opinion");
+				return true;								
 		}
 
 	}
