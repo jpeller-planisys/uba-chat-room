@@ -100,7 +100,7 @@ CREATE TABLE IF NOT EXISTS `current_round_data` (
   `data` text NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-CREATE TABLE `channels` (
+CREATE TABLE  IF NOT EXISTS  `channels` (
  `id` mediumint(9) NOT NULL,
  `name` varchar(64) NOT NULL,
  PRIMARY KEY (`id`),
@@ -108,7 +108,7 @@ CREATE TABLE `channels` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
-CREATE TABLE `opinion_changes` (
+CREATE TABLE  IF NOT EXISTS  `opinion_changes` (
  `id` int(11) NOT NULL AUTO_INCREMENT,
  `userID` int(11) NOT NULL,
  `channelID` int(11) NOT NULL,
@@ -117,7 +117,7 @@ CREATE TABLE `opinion_changes` (
  `client_time` datetime NOT NULL,
  `server_time` datetime NOT NULL,
  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8
+) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8;
 
 
 CREATE TABLE IF NOT EXISTS `results` (
