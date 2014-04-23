@@ -166,7 +166,7 @@ ajaxChat.getUserNodeStringItems =  function(encodedUserName, userID, isInline) {
 		if(encodedUserName !== this.encodedUserName) {
 			menu = '';
 			if(this.userRole === '2' || this.userRole === '3') { //admin y moderadores
-				menu	+= '<li><a href="javascript:ajaxChat.insertMessageWrapper(\'/kick '
+				menu	+= '<li><a href="javascript:ajaxChat.sendMessageWrapper(\'/kick '
 						+ encodedUserName
 						+ ' \');">'
 						+ this.lang['userMenuKick']
