@@ -31,11 +31,11 @@
       slide: function( event, ui ) {
 
         ajaxChat.sendMessage("/opinion_change "+ui.value+" "+ajaxChat.getDatetime());
-        $( "#amount" ).val( ui.value );
+        //$( "#amount" ).val( ui.value );
       }
     });
 
-    $( "#amount" ).val( $( "#slider-vertical" ).slider( "value" ) );
+    //$( "#amount" ).val( $( "#slider-vertical" ).slider( "value" ) );
   });
   </script>
 
