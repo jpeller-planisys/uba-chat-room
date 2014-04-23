@@ -526,6 +526,14 @@ class CustomAJAXChat extends AJAXChat {
 			case '/end_opinion':
 				$this->insertChatBotMessageInAllChannels("/end_opinion");
 				return true;								
+
+			case '/close_chatbox':
+				$this->insertChatBotMessageInAllChannels("/close_chatbox");
+				return true;				
+			
+			case '/open_chatbox':
+				$this->insertChatBotMessageInAllChannels("/open_chatbox");
+				return true;									
 		}
 
 	}

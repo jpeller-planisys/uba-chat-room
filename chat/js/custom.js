@@ -93,6 +93,8 @@ ajaxChat.chronometer = function (i)
 ajaxChat.toggleChatbox = function (show)
 {
 	$("#inputFieldContainer").css("display", (show? "block": "none"));
+	$("#submitButtonContainer").css("display", (show? "block": "none"));
+	
 }
 
 
@@ -166,6 +168,8 @@ ajaxChat.getUserNodeStringItems =  function(encodedUserName, userID, isInline) {
 				menu	+= '<li><a href="javascript:ajaxChat.sendMessageWrapper(\'/close_round\');">Pedir opinion</a></li>';
 				menu	+= '<li><a href="javascript:ajaxChat.sendMessageWrapper(\'/start_opinion\');">Permitir opinar</a></li>';
 				menu	+= '<li><a href="javascript:ajaxChat.sendMessageWrapper(\'/end_opinion\');">No permitir opinar</a></li>';
+				menu	+= '<li><a href="javascript:ajaxChat.sendMessageWrapper(\'/close_chatbox\');">Cerrar Chatbox</a></li>';
+				menu	+= '<li><a href="javascript:ajaxChat.sendMessageWrapper(\'/open_chatbox\');">Abrir Chatbox</a></li>';
 				menu	+= '<li><a href="javascript:ajaxChat.sendMessageWrapper(\'/restart_clock\');">Reiniciar clock</a></li>';
 				
 
