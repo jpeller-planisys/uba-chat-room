@@ -33,6 +33,33 @@ class CustomAJAXChat extends AJAXChat {
 
 	}
 
+	function generateValidUsername()
+	{
+		
+
+		$onlineUsersData = $this->getOnlineUsersData();
+		
+		$userName = "usuario". str_pad((string)rand(1,4000), 4, "0", STR_PAD_LEFT);
+		$listo = false;
+		while(!$listo)
+		{
+			$existe = false;
+			foreach($onlineUsersData as $onlineUser)
+			{
+				if($userName == $onlineUser["userName"]) 
+				{
+					$existe = true;
+					break;
+				}
+			}
+
+			if($existe) $userName = "usuario". str_pad((string)rand(1,4000), 4, "0", STR_PAD_LEFT);
+			else return $userName;
+		}
+		
+					
+	}
+
 	// Returns an associative array containing userName, userID and userRole
 	// Returns null if login is invalid
 	function getValidLoginUserData() {
@@ -62,9 +89,10 @@ class CustomAJAXChat extends AJAXChat {
 				$userName = $this->getRequestVar('userName');
 				$userName = $this->convertEncoding($userName, $this->getConfig('contentEncoding'), $this->getConfig('sourceEncoding'));
 
+				$userName = $this->generateValidUsername();
+
 				$onlineUsersData = $this->getOnlineUsersData();
-				//print_r($onlineUsersData);
-				//die();
+				
 				if($userName == "admin") return null;
 				$id = 1;
 				foreach($onlineUsersData as $onlineUser)

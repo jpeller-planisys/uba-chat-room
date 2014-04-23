@@ -52,8 +52,11 @@
 					<div id="loginFormContainer">
 						<input type="hidden" name="login" id="loginField" value="login"/>
 						<input type="hidden" name="redirect" id="redirectField" value="[REDIRECT_URL/]"/>
-						<div><label for="userNameField">[LANG]userName[/LANG]:</label><br />
-						<input type="text" name="userName" id="userNameField" maxlength="[USER_NAME_MAX_LENGTH/]"/></div>
+						<div>
+						[OMIT]
+							<label for="userNameField">[LANG]userName[/LANG]:</label><br />
+						[/OMIT]
+						<input type="hidden" name="userName" id="userNameField" maxlength="[USER_NAME_MAX_LENGTH/]"/></div>
 						[OMIT]<div><label for="passwordField">[LANG]password[/LANG]*:</label><br />
 						<input type="password" name="password" id="passwordField"/></div>
 						<div><label for="channelField">[LANG]channel[/LANG]:</label><br />
@@ -68,7 +71,7 @@
 					</div>
 				</form>
 				<div id="errorContainer">[ERROR_MESSAGES/]<noscript><div>[LANG]requiresJavaScript[/LANG]</div></noscript></div>
-			</div>
+			</div> 
 			<div style="float:left;">
 				Este es el texto de introducción <br /> <span style='color:red;'>Rojo</span>
 			</div>
