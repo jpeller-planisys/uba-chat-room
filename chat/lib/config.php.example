@@ -170,7 +170,7 @@ $config['messageTextMaxLength'] = 1040;
 $config['maxMessageRate'] = 20;
 
 // Defines the default time in minutes a user gets banned if kicked from a moderator without ban minutes parameter:
-$config['defaultBanTime'] = 5;
+$config['defaultBanTime'] = null;
 
 // Argument that is given to the handleLogout JavaScript method:
 $config['logoutData'] = './?logout=true';

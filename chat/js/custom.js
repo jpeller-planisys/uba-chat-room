@@ -156,7 +156,11 @@ ajaxChat.getUserNodeStringItems =  function(encodedUserName, userID, isInline) {
 		if(encodedUserName !== this.encodedUserName) {
 			menu = '';
 			if(this.userRole === '2' || this.userRole === '3') { //admin y moderadores
-				menu	+= '<li><a href="javascript:ajaxChat.sendMessageWrapper(\'/force_logout\');">Desloguear usuario</a></li>';
+				menu	+= '<li><a href="javascript:ajaxChat.insertMessageWrapper(\'/kick '
+						+ encodedUserName
+						+ ' \');">'
+						+ this.lang['userMenuKick']
+						+ '</a></li>';
 			}
 		} 
 		else 
