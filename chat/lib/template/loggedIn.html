@@ -138,7 +138,9 @@
 			<h1>[LANG]title[/LANG]</h1>
 		</div>
 		<div id="logoutChannelContainer">
-  			<input type="[LOGOUT_BUTTON_TYPE/]" id="logoutButton" value="[LANG]logout[/LANG]" onclick="ajaxChat.logout();"/>
+  			<div style="float:left;">
+  				<input type="[LOGOUT_BUTTON_TYPE/]" id="logoutButton" value="[LANG]logout[/LANG]" onclick="ajaxChat.logout();"/>
+  			</div>
 			<div style="display:[SWITCH_CHANNEL_BUTTON_DIV/];float:left;">
 			<label for="channelSelection">[LANG]channel[/LANG]:</label>
 			<select id="channelSelection" onchange="ajaxChat.switchChannel(this.options[this.selectedIndex].value);">[CHANNEL_OPTIONS/]</select>
