@@ -437,6 +437,13 @@ class CustomAJAXChat extends AJAXChat {
 				if($val !== false) return $val;
 				else return 50;
 			break;
+
+			case 'LOGOUT_BUTTON_TYPE':
+			
+				if($this->getConfig('showLogoutButton')) return "button";
+				else return "hidden";
+
+
 		}
 	}
 
@@ -486,6 +493,7 @@ class CustomAJAXChat extends AJAXChat {
 				$this->initializeGame($textParts);
 				return true;
 			break;
+
 
 			case '/opinion_change':
 				$this->addOpinionChange($textParts[1], $textParts[2]." ".$textParts[3]);
