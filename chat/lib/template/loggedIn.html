@@ -139,13 +139,15 @@
 		</div>
 		<div id="logoutChannelContainer">
   			<input type="[LOGOUT_BUTTON_TYPE/]" id="logoutButton" value="[LANG]logout[/LANG]" onclick="ajaxChat.logout();"/>
-			[OMIT]
+			<div style="display:[SWITCH_CHANNEL_BUTTON_DIV/];float:left;">
 			<label for="channelSelection">[LANG]channel[/LANG]:</label>
 			<select id="channelSelection" onchange="ajaxChat.switchChannel(this.options[this.selectedIndex].value);">[CHANNEL_OPTIONS/]</select>
-			[/OMIT]
-			[OMIT]
-				<label for="styleSelection">[LANG]style[/LANG]:</label>
+			</div>
+			<div style="display:[STYLE_OPTION_DISPLAY/];float:left;">
+				&nbsp;<label for="styleSelection">[LANG]style[/LANG]:</label>
 				<select id="styleSelection" onchange="ajaxChat.setActiveStyleSheet(ajaxChat.getSelectedStyle());">[STYLE_OPTIONS/]</select>
+			</div>
+			[OMIT]
 				<label for="languageSelection">[LANG]language[/LANG]:</label>
 				<select id="languageSelection" onchange="ajaxChat.switchLanguage(this.value);">[LANGUAGE_OPTIONS/]</select>
 			[/OMIT]

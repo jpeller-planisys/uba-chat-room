@@ -209,5 +209,6 @@ $config['socketServerChatID'] = 0;
 
 
 $config['showLogoutButton'] = true;
+$config['showStyleSelection'] = false;
 
 ?>

@@ -439,12 +439,27 @@ class CustomAJAXChat extends AJAXChat {
 			break;
 
 			case 'LOGOUT_BUTTON_TYPE':
-			
 				if($this->getConfig('showLogoutButton')) return "button";
 				else return "hidden";
+			break;
+
+			case 'SWITCH_CHANNEL_BUTTON_DIV':
+				if($this->isAdmin()) return 'block';
+				else return 'none';
+			break;
+
+			case 'STYLE_OPTION_DISPLAY':
+				if($this->getConfig('showStyleSelection')) return 'block';
+				else return 'none';
+			break;
 
 
 		}
+	}
+
+	function isAdmin()
+	{
+		return $this->getUserRole() == AJAX_CHAT_ADMIN;
 	}
 
 	function addOpinionChange($value, $client_time)
