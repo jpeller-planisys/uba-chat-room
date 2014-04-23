@@ -9,6 +9,7 @@
  */
 
 $lang = array();
+$lang['askInitialOpinion'] = "Este es el texto que se muestra al pedir una opinión inicial";
 $lang['title'] = 'Chat-room @ UBA';
 $lang['userName'] = 'Usuario';
 $lang['password'] = 'Contraseña';

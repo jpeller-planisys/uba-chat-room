@@ -294,12 +294,9 @@ class CustomAJAXChat extends AJAXChat {
 		}
 		else
 		{
+			$channelsHandler->reset(); //move people to public and delete channels
 			$text = '/error ExhaustedCombinations '.(count($usersData)-1);
 			$this->insertChatBotMessage($this->getPrivateMessageID(),$text);		
-			
-
-			$channelsHandler->reset();
-			$pairCombinator->saveAndReset();
 			$this->insertChatBotMessage("0","/close_chatbox");
 			$this->insertChatBotMessage("0","El experimento termino");
 			
@@ -503,7 +500,10 @@ class CustomAJAXChat extends AJAXChat {
 				//$this->insertChatBotMessageInAllChannels("/end_opinion");
 				return true;
 			break;
-
+			case '/ask_initial_opinion':
+					$this->insertChatBotMessage("0",$this->getLang("askInitialOpinion"));		
+					return true;
+			break;
 			case '/close_round':
 				$this->insertChatBotMessageInAllChannels("/restart_clock");
 				$this->insertChatBotMessageInAllChannels("/start_opinion");
@@ -539,7 +539,14 @@ class CustomAJAXChat extends AJAXChat {
 			
 			case '/open_chatbox':
 				$this->insertChatBotMessageInAllChannels("/open_chatbox");
-				return true;									
+				return true;				
+			case '/close_experiment':
+				/*dump something to some place & unlog users*/
+				$pairCombinator = new PairHandler($this->db);
+				$pairCombinator->saveAndReset();
+				$this->insertChatBotMessageInAllChannels("/close_experiment");
+				return true;
+
 		}
 
 	}
