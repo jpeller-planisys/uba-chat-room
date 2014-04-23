@@ -281,6 +281,7 @@ class CustomAJAXChat extends AJAXChat {
 			for($i=0; $i < $n; $i++) { 
 				$this->insertChatBotMessage($channels[$i]["id"], "/restart_clock");
 				$this->insertChatBotMessage($channels[$i]["id"], "/end_opinion");
+				$this->insertChatBotMessage($channels[$i]["id"], "/open_chatbox");
 				$this->insertChatBotMessage($channels[$i]["id"],"Bienvenidos a la ronda numero {$current_round}, conversaran entre ".$usersDataByID[$roundPairs[$i][0]]["userName"]."  y ".$usersDataByID[$roundPairs[$i][1]]["userName"]	." durate x minutos");		
 				$this->switchOtherUsersChannel($channels[$i]["name"], $usersDataByID[$roundPairs[$i][0]]);
 				$this->switchOtherUsersChannel($channels[$i]["name"], $usersDataByID[$roundPairs[$i][1]]);	
@@ -293,11 +294,15 @@ class CustomAJAXChat extends AJAXChat {
 		}
 		else
 		{
-			$channelsHandler->reset();
-			$pairCombinator->saveAndReset();
 			$text = '/error ExhaustedCombinations '.(count($usersData)-1);
 			$this->insertChatBotMessage($this->getPrivateMessageID(),$text);		
+			
+
+			$channelsHandler->reset();
+			$pairCombinator->saveAndReset();
+			$this->insertChatBotMessage("0","/close_chatbox");
 			$this->insertChatBotMessage("0","El experimento termino");
+			
 			
 			return false;
 		
@@ -491,6 +496,7 @@ class CustomAJAXChat extends AJAXChat {
 				{
 					$this->insertChatBotMessage("0", "/restart_clock");
 					$this->insertChatBotMessage("0", "/end_opinion");					
+					$this->insertChatBotMessage("0", "/open_chatbox");					
 					$this->insertChatBotMessage("0","Comienza la ronda ".$currentRound);		
 				}
 		
