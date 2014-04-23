@@ -32,9 +32,8 @@
 
         ajaxChat.sendMessage("/opinion_change "+ui.value+" "+ajaxChat.getDatetime());
         //$( "#amount" ).val( ui.value );
-      }
+      }     
     });
-
     //$( "#amount" ).val( $( "#slider-vertical" ).slider( "value" ) );
   });
   </script>
@@ -166,12 +165,29 @@
 		</div>
 		<div id="chatList"></div>
 		<div id="opinionBarContainer">
-			<p>
-			  <label for="amount">Opinion</label>
-			  <input type="text" id="amount" style="border:0; background-color:#F1F1F1; color:#f6931f; font-weight:bold;width:30px;" />
-			</p>
-			 
-			<div id="slider-vertical" style="height:75%;margin-left:auto;margin-right:auto;bottom:5px;"></div>
+			<div class='' >
+				<p>
+				  <label for="amount">Opinion</label>
+				  <input type="text" id="amount" style="border:0; background-color:#F1F1F1; color:#f6931f; font-weight:bold;width:30px;" />
+				</p>
+			</div>
+			<div id='opinion_container' style="height:100%;"> 
+					<div style="width:10%;height:80%;bottom:5px; float:left; margin-left:12px;">
+						<div style="height:33%;border-bottom: 1px solid #0066B9;"></div>
+						<div style="height:34%;border-bottom: 1px solid #0066B9;"></div>
+						<div style="height:33%;"></div>
+					</div>
+					<div id="slider-vertical" style="height:80%;bottom:5px;  float:left;"></div>
+
+					<div style="width:10%;height:80%;bottom:5px;  float:left;">
+						<div style="height:33%;border-bottom: 1px solid #0066B9;"></div>
+						<div style="height:34%;border-bottom: 1px solid #0066B9;"></div>
+						<div style="height:33%;"></div>
+					</div>
+					 <br style="clear: left;" />
+			
+             </div>
+
 		</div>
 		<div id="inputFieldContainer">
 			<textarea id="inputField" rows="1" cols="50" title="[LANG]inputLineBreak[/LANG]" onkeypress="ajaxChat.handleInputFieldKeyPress(event);" onkeyup="ajaxChat.handleInputFieldKeyUp(event);"></textarea>
