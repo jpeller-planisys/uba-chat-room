@@ -190,10 +190,10 @@
              </div>
 
 		</div>
-		<div id="inputFieldContainer">
+		<div id="inputFieldContainer" style="display:none;">
 			<textarea id="inputField" rows="1" cols="50" title="[LANG]inputLineBreak[/LANG]" onkeypress="ajaxChat.handleInputFieldKeyPress(event);" onkeyup="ajaxChat.handleInputFieldKeyUp(event);"></textarea>
 		</div>
-		<div id="submitButtonContainer">
+		<div id="submitButtonContainer" style="display:none;">
 			<span id="messageLengthCounter">0/[MESSAGE_TEXT_MAX_LENGTH/]</span>
 			<input type="button" id="submitButton" value="[LANG]messageSubmit[/LANG]" onclick="ajaxChat.sendMessage();"/>
 		</div>
