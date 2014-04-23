@@ -29,6 +29,16 @@ ajaxChat.replaceCustomCommands = function(text, textParts) {
 			return false;
 		break;
 
+		case '/open_chatbox':
+			ajaxChat.toggleChatbox(true);
+			return false;
+		break;
+		case '/close_chatbox':
+			ajaxChat.toggleChatbox(false);
+			return false;
+		break;
+
+
 
 	}
 	
@@ -80,6 +90,12 @@ ajaxChat.chronometer = function (i)
 	this.timeout=setTimeout(function(){ajaxChat.chronometer(i+1)},1000);
 }
 
+ajaxChat.toggleChatbox = function (show)
+{
+	$("#inputFieldContainer").css("display", (show? "block": "none"));
+}
+
+
 ajaxChat.startOpinion = function ()
 {
 	$("#opinionBarContainer").css("display", "block");
@@ -113,6 +129,8 @@ ajaxChat.customOnNewMessage = function(dateObject, userID, userName, userRole, m
 	
 	switch(messageText)
 	{
+		case '/close_chatbox':
+		case '/open_chatbox':
 		case '/end_opinion':
 		case '/start_opinion':
 		case '/restart_clock':
@@ -127,4 +145,32 @@ ajaxChat.customOnNewMessage = function(dateObject, userID, userName, userRole, m
 	}
 	
 	return true;
+}
+
+
+
+ajaxChat.getUserNodeStringItems =  function(encodedUserName, userID, isInline) {
+		var menu;
+		if(encodedUserName !== this.encodedUserName) {
+			menu = '';
+			if(this.userRole === '2' || this.userRole === '3') { //admin y moderadores
+				menu	+= '<li><a href="javascript:ajaxChat.sendMessageWrapper(\'/force_logout\');">Desloguear usuario</a></li>';
+			}
+		} 
+		else 
+		{
+			menu 	= '';
+			if(this.userRole === '2' || this.userRole === '3') { //admin y moderadores
+				menu	+= '<li><a href="javascript:ajaxChat.sendMessageWrapper(\'/init_game\');">Calcular rondas de chat</a></li>';
+				menu	+= '<li><a href="javascript:ajaxChat.sendMessageWrapper(\'/round\');">Avanzar un paso</a></li>';
+				menu	+= '<li><a href="javascript:ajaxChat.sendMessageWrapper(\'/close_round\');">Pedir opinion</a></li>';
+				menu	+= '<li><a href="javascript:ajaxChat.sendMessageWrapper(\'/start_opinion\');">Permitir opinar</a></li>';
+				menu	+= '<li><a href="javascript:ajaxChat.sendMessageWrapper(\'/end_opinion\');">No permitir opinar</a></li>';
+				menu	+= '<li><a href="javascript:ajaxChat.sendMessageWrapper(\'/restart_clock\');">Reiniciar clock</a></li>';
+				
+
+			}
+		}
+		menu += this.getCustomUserMenuItems(encodedUserName, userID);
+		return menu;
 }

@@ -1092,29 +1092,6 @@ var ajaxChat = {
 		this.dom['chatList'].scrollTop = this.dom['chatList'].scrollHeight;
 	},
 	
-	getUserNodeStringItems: function(encodedUserName, userID, isInline) {
-		var menu;
-		if(encodedUserName !== this.encodedUserName) {
-			menu = '';
-		} 
-		else 
-		{
-			menu 	= '';
-			if(this.userRole === '2' || this.userRole === '3') { //admin y moderadores
-				menu	+= '<li><a href="javascript:ajaxChat.sendMessageWrapper(\'/init_game\');">Calcular rondas de chat</a></li>';
-				menu	+= '<li><a href="javascript:ajaxChat.sendMessageWrapper(\'/round\');">Avanzar un paso</a></li>';
-				menu	+= '<li><a href="javascript:ajaxChat.sendMessageWrapper(\'/close_round\');">Pedir opinion</a></li>';
-				menu	+= '<li><a href="javascript:ajaxChat.sendMessageWrapper(\'/start_opinion\');">Permitir opinar</a></li>';
-				menu	+= '<li><a href="javascript:ajaxChat.sendMessageWrapper(\'/end_opinion\');">No permitir opinar</a></li>';
-				menu	+= '<li><a href="javascript:ajaxChat.sendMessageWrapper(\'/restart_clock\');">Reiniciar clock</a></li>';
-				
-
-			}
-		}
-		menu += this.getCustomUserMenuItems(encodedUserName, userID);
-		return menu;
-	},
-
 	
 	setOnlineListRowClasses: function() {
 		if(this.dom['onlineList']) {
