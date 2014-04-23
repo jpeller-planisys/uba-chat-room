@@ -65,7 +65,7 @@ class CustomAJAXChat extends AJAXChat {
 				$onlineUsersData = $this->getOnlineUsersData();
 				//print_r($onlineUsersData);
 				//die();
-
+				if($userName == "admin") return null;
 				$id = 1;
 				foreach($onlineUsersData as $onlineUser)
 				{
@@ -120,7 +120,7 @@ class CustomAJAXChat extends AJAXChat {
 	}
 
 	// Store the channels the current user has access to
-	// Make sure channel names don't contain any whitespace
+	// Make sure channel names don't c ontain any whitespace
 	function &getChannels() {
 		$this->_channels = array();
 		
