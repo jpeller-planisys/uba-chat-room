@@ -93,10 +93,7 @@ ajaxChat.endOpinion = function ()
 ajaxChat.checkTime = function (i)
 {
 
-	if (i<10)
-	  {
-	  i="0" + i;
-	  }
+	if (i<10) i="0" + i;
 	return i;
 }
 
@@ -105,6 +102,8 @@ ajaxChat.checkTime = function (i)
 	// This method is called on page load
 ajaxChat.customInitialize = function() {		
 	this.chronometer(0);
+	this.setAudioVolume(0.0);
+
 }
 
 
