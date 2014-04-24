@@ -156,9 +156,9 @@ ajaxChat.getUserNodeStringItems =  function(encodedUserName, userID, isInline) {
 		if(encodedUserName !== this.encodedUserName) {
 			menu = '';
 			if(this.userRole === '2' || this.userRole === '3') { //admin y moderadores
-				menu	+= '<li><a href="javascript:ajaxChat.sendMessageWrapper(\'/kick '
+				menu	+= '<li><a href="javascript:ajaxChat.sendMessageWrapperIfConfirm(\'/kick '
 						+ encodedUserName
-						+ ' \');">'
+						+ ' \',\'Está seguro que desea desloguear a este usuario? Las rondas calculadas se corromperán.\');">'
 						+ this.lang['userMenuKick']
 						+ '</a></li>';
 			}
@@ -186,8 +186,8 @@ ajaxChat.getUserNodeStringItems =  function(encodedUserName, userID, isInline) {
 				menu	+= '<li>---------------------</li>';
 				menu	+= '<li>Cierre</li>';
 				menu	+= '<li><a href="javascript:ajaxChat.sendMessageWrapper(\'/restart_clock\');">Reiniciar clock</a></li>';
-				menu	+= '<li><a href="javascript:ajaxChat.sendMessageWrapper(\'/close_experiment\');">Redirigir a pantalla de finalización</a></li>';
-				menu	+= '<li><a href="javascript:ajaxChat.sendMessageWrapper(\'/empty_messages\');">Borrar todo</a></li>';
+				menu	+= '<li><a href="javascript:ajaxChat.sendMessageWrapperIfConfirm(\'/close_experiment\', \'Este paso es irreversible. Está seguro que quiere redirigir a todos los usuarios a la pantalla de finalización?\');">Redirigir a pantalla de finalización</a></li>';
+				menu	+= '<li><a href="javascript:ajaxChat.sendMessageWrapperIfConfirm(\'/empty_messages\', \'Vaciará todos los datos generados. Está seguro que desea continuar?\');">Borrar todo</a></li>';
 
 				
 
@@ -195,4 +195,12 @@ ajaxChat.getUserNodeStringItems =  function(encodedUserName, userID, isInline) {
 		}
 		menu += this.getCustomUserMenuItems(encodedUserName, userID);
 		return menu;
+}
+
+ajaxChat.sendMessageWrapperIfConfirm = function(message, confirmation_message)
+{
+	if(confirm(confirmation_message))
+	{
+		return this.sendMessageWrapper(message);
+	}
 }
