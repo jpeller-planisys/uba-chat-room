@@ -84,7 +84,15 @@ ajaxChat.chronometer = function (i)
 	m=this.checkTime(m);
 	s=this.checkTime(s);
 	*/
-	document.getElementById('chronometer').innerHTML = i;
+	var mins = 0;
+	var secs = i;
+	while(secs > 59)
+	{
+		secs -= 60;
+		mins += 1;
+    }
+    
+	document.getElementById('chronometer').innerHTML = this.checkTime(mins)+":"+this.checkTime(secs);
 
 	this.timeout=setTimeout(function(){ajaxChat.chronometer(i+1)},1000);
 }
