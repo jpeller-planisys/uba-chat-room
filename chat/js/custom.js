@@ -13,8 +13,7 @@
 ajaxChat.replaceCustomCommands = function(text, textParts) {
 	switch(textParts[0])
 	{
-		case '/round':
-			return this.replaceCommandRound(textParts);
+	
 		case '/restart_clock':
 			ajaxChat.restartChronometer(0);
 			//return "restarteado!";
@@ -49,18 +48,8 @@ ajaxChat.replaceCustomCommands = function(text, textParts) {
 }
 
 ajaxChat.goToExitScreen = function()
-{
-	
-		window.location.replace("end.html");
-}
-
-ajaxChat.replaceCommandRound = function(textParts) {
-		//var rollText = this.lang['roll'].replace(/%s/, textParts[1]);
-		//rollText = rollText.replace(/%s/, textParts[2]);
-		//rollText = rollText.replace(/%s/, textParts[3]);
-		return	'<span class="chatBotMessage">'
-				+ this.lang['roundStartMessage']+
-				+ '</span>';		
+{	
+	window.location.replace("end.html");
 }
 
 ajaxChat.getDatetime = function()
@@ -91,7 +80,7 @@ ajaxChat.chronometer = function (i)
 		secs -= 60;
 		mins += 1;
     }
-    
+
 	document.getElementById('chronometer').innerHTML = this.checkTime(mins)+":"+this.checkTime(secs);
 
 	this.timeout=setTimeout(function(){ajaxChat.chronometer(i+1)},1000);
