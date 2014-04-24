@@ -506,6 +506,8 @@ class CustomAJAXChat extends AJAXChat {
 				return true;
 			break;
 			case '/ask_initial_opinion':
+					$this->insertChatBotMessage("0", "/restart_clock");
+					$this->insertChatBotMessage("0", "/start_opinion");
 					$this->insertChatBotMessage("0",$this->getLang("askInitialOpinionMessage"));		
 					return true;
 			break;

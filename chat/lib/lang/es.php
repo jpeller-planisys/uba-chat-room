@@ -9,7 +9,7 @@
  */
 
 $lang = array();
-$lang['askInitialOpinionMessage'] = "Se ha habilitado la barra de opinión. Por favor, marque cuán de acuerdo o en desacuerdo se siente con respecto a la propuesta";
+$lang['askInitialOpinionMessage'] = "Se ha habilitado la barra de opinión. Tienen 1 minuto para marcar cuán de acuerdo o en desacuerdo se siente con respecto a la propuesta.";
 $lang["initGameOkGeneralMessage"] = "¡Bienvenidos al experimento! En unos momentos les pediremos que nos den su opinión inicial sobre la propuesta. Luego, lanzaremos diferentes rondas de chats tras las cuales podrán modificar su posición original.";
 $lang["lastRoundEndedMessage"] = "Las rondas de chat terminaron. En breve serán redirigidos a la pantalla de finalización. Por favor, aguarden.";
 $lang["redirectedToEndMessage"] = "(Aviso) Los usuarios fueron redirigidos a la pantalla de finalización. El experimento terminó.";
