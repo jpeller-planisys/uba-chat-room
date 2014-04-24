@@ -13,8 +13,6 @@
 ajaxChat.replaceCustomCommands = function(text, textParts) {
 	switch(textParts[0])
 	{
-		case '/init_game_ok':
-			return this.replaceCommandInitGameOk(textParts);
 		case '/round':
 			return this.replaceCommandRound(textParts);
 		case '/restart_clock':
@@ -61,16 +59,7 @@ ajaxChat.replaceCommandRound = function(textParts) {
 		//rollText = rollText.replace(/%s/, textParts[2]);
 		//rollText = rollText.replace(/%s/, textParts[3]);
 		return	'<span class="chatBotMessage">'
-				+ "Comenzó un nuevo round de chats! Tienen 5 minutos para discutir"
-				+ '</span>';		
-}
-
-ajaxChat.replaceCommandInitGameOk = function(textParts) {
-		//var rollText = this.lang['roll'].replace(/%s/, textParts[1]);
-		//rollText = rollText.replace(/%s/, textParts[2]);
-		//rollText = rollText.replace(/%s/, textParts[3]);
-		return	'<span class="chatBotMessage">'
-				+ "Los rounds ya están calculados. Pueden comenzar las rondas!"
+				+ this.lang['roundStartMessage']+
 				+ '</span>';		
 }
 
@@ -180,7 +169,7 @@ ajaxChat.getUserNodeStringItems =  function(encodedUserName, userID, isInline) {
 			if(this.userRole === '2' || this.userRole === '3') { //admin y moderadores
 				menu	+= '<li><a href="javascript:ajaxChat.sendMessageWrapper(\'/init_game\');">Calcular rondas de chat</a></li>';
 				menu	+= '<li><a href="javascript:ajaxChat.sendMessageWrapper(\'/round\');">Avanzar un paso</a></li>';
-				menu	+= '<li><a href="javascript:ajaxChat.sendMessageWrapper(\'/close_round\');">Pedir opinion</a></li>';
+				menu	+= '<li><a href="javascript:ajaxChat.sendMessageWrapper(\'/close_round\');">Pedir opinion (y avisar fin de ronda)</a></li>';
 				menu	+= '<li><a href="javascript:ajaxChat.sendMessageWrapper(\'/ask_initial_opinion\');">Pedir opinion inicial</a></li>';
 				menu	+= '<li><a href="javascript:ajaxChat.sendMessageWrapper(\'/start_opinion\');">Permitir opinar</a></li>';
 				menu	+= '<li><a href="javascript:ajaxChat.sendMessageWrapper(\'/end_opinion\');">No permitir opinar</a></li>';

@@ -246,8 +246,8 @@ class CustomAJAXChat extends AJAXChat {
 		if($pairCombinator->initializeFor($ids))
 		{
 
-			$this->insertChatBotMessage( $this->getPrivateMessageID(), '/init_game_ok');
-			$this->insertChatBotMessage("0","Este es el canal público del experimento. Lanzaremos chats aleatorios entre ustedes. Etc. El experimento está a punto de comenzar.");		
+			$this->insertChatBotMessage( $this->getPrivateMessageID(), $this->getLang("pairsCalculatedNotifyModeratorMessage"));
+			$this->insertChatBotMessage("0", $this->getLang("initGameOkGeneralMessage"));		
 			return true;	
 		}		
 
@@ -282,7 +282,7 @@ class CustomAJAXChat extends AJAXChat {
 				$this->insertChatBotMessage($channels[$i]["id"], "/restart_clock");
 				$this->insertChatBotMessage($channels[$i]["id"], "/end_opinion");
 				$this->insertChatBotMessage($channels[$i]["id"], "/open_chatbox");
-				$this->insertChatBotMessage($channels[$i]["id"],"Bienvenidos a la ronda numero {$current_round}, conversaran entre ".$usersDataByID[$roundPairs[$i][0]]["userName"]."  y ".$usersDataByID[$roundPairs[$i][1]]["userName"]	." durate x minutos");		
+				$this->insertChatBotMessage($channels[$i]["id"],"Bienvenidos a la ronda número {$current_round}, conversaran entre ".$usersDataByID[$roundPairs[$i][0]]["userName"]."  y ".$usersDataByID[$roundPairs[$i][1]]["userName"]	." durate x minutos");		
 				$this->switchOtherUsersChannel($channels[$i]["name"], $usersDataByID[$roundPairs[$i][0]]);
 				$this->switchOtherUsersChannel($channels[$i]["name"], $usersDataByID[$roundPairs[$i][1]]);	
 			}
@@ -298,7 +298,7 @@ class CustomAJAXChat extends AJAXChat {
 			$text = '/error ExhaustedCombinations '.(count($usersData)-1);
 			$this->insertChatBotMessage($this->getPrivateMessageID(),$text);		
 			$this->insertChatBotMessage("0","/close_chatbox");
-			$this->insertChatBotMessage("0","El experimento termino");
+			$this->insertChatBotMessage("0", $this->getLang("lastRoundEndedMessage"));
 			
 			
 			return false;
@@ -455,6 +455,11 @@ class CustomAJAXChat extends AJAXChat {
 				else return 'none';
 			break;
 
+			default:
+				if($this->getLang($tag) !== null) return $this->getLang($tag);
+				if($this->getConfig($tag) !== null) return $this->getConfig($tag);
+
+
 
 		}
 	}
@@ -501,7 +506,7 @@ class CustomAJAXChat extends AJAXChat {
 				return true;
 			break;
 			case '/ask_initial_opinion':
-					$this->insertChatBotMessage("0",$this->getLang("askInitialOpinion"));		
+					$this->insertChatBotMessage("0",$this->getLang("askInitialOpinionMessage"));		
 					return true;
 			break;
 			case '/close_round':
@@ -545,9 +550,9 @@ class CustomAJAXChat extends AJAXChat {
 				$pairCombinator = new PairHandler($this->db);
 				$pairCombinator->saveAndReset();
 				$this->insertChatBotMessageInAllChannels("/close_experiment");
-				$this->insertChatBotMessage($this->getPrivateMessageID(),"Los usuarios fueron redirigidos a end.html");
+				$this->insertChatBotMessage($this->getPrivateMessageID(),$this->getLang("redirectedToEndMessage"));
 				return true;
-
+			
 		}
 
 	}

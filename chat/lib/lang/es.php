@@ -9,7 +9,14 @@
  */
 
 $lang = array();
-$lang['askInitialOpinion'] = "Este es el texto que se muestra al pedir una opinión inicial";
+$lang['askInitialOpinionMessage'] = "Este es el texto que se muestra al pedir una opinión inicial";
+$lang["redirectedToEndMessage"] = "Los usuarios fueron redirigidos a end.html";
+$lang["initGameOkGeneralMessage"] = "Este es el canal público del experimento. Lanzaremos chats aleatorios entre ustedes. Etc. El experimento está a punto de comenzar.";
+$lang["roundStartMessage"] = "Comenzó un nuevo round de chats! Tienen 5 minutos para discutir";
+$lang["lastRoundEndedMessage"] = "El experimento termino";
+$lang["pairsCalculatedNotifyModeratorMessage"] = "Los rounds ya están calculados. Pueden comenzar las rondas!";
+
+
 $lang['title'] = 'Chat-room @ UBA';
 $lang['userName'] = 'Usuario';
 $lang['password'] = 'Contraseña';
