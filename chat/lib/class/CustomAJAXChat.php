@@ -255,7 +255,12 @@ class CustomAJAXChat extends AJAXChat {
 
 	}
 
-	
+	function getLangAndReplace($key, $replacements)	
+	{
+		$str = $this->getLang($key);
+
+		return str_replace( array_keys($replacements), array_values($replacements), $str);
+	}
 
 	function launchNewRound($textParts) {
 
@@ -282,7 +287,7 @@ class CustomAJAXChat extends AJAXChat {
 				$this->insertChatBotMessage($channels[$i]["id"], "/restart_clock");
 				$this->insertChatBotMessage($channels[$i]["id"], "/end_opinion");
 				$this->insertChatBotMessage($channels[$i]["id"], "/open_chatbox");
-				$this->insertChatBotMessage($channels[$i]["id"],"Bienvenidos a la ronda número {$current_round}, conversaran entre ".$usersDataByID[$roundPairs[$i][0]]["userName"]."  y ".$usersDataByID[$roundPairs[$i][1]]["userName"]	." durate x minutos");		
+				$this->insertChatBotMessage($channels[$i]["id"], $this->getLangAndReplace("roundStartMessage", array("CURRENT_ROUND" => $current_round, "USER1" => $usersDataByID[$roundPairs[$i][0]]["userName"], "USER2" => $usersDataByID[$roundPairs[$i][1]]["userName"] )));		
 				$this->switchOtherUsersChannel($channels[$i]["name"], $usersDataByID[$roundPairs[$i][0]]);
 				$this->switchOtherUsersChannel($channels[$i]["name"], $usersDataByID[$roundPairs[$i][1]]);	
 			}
@@ -499,7 +504,7 @@ class CustomAJAXChat extends AJAXChat {
 					$this->insertChatBotMessage("0", "/restart_clock");
 					$this->insertChatBotMessage("0", "/end_opinion");					
 					$this->insertChatBotMessage("0", "/open_chatbox");					
-					$this->insertChatBotMessage("0","Comienza la ronda ".$currentRound);		
+					$this->insertChatBotMessage("0", $this->getLangAndReplace("roundStartPublicMessage", array("CURRENT_ROUND" => $currentRound)));		
 				}
 		
 				//$this->insertChatBotMessageInAllChannels("/end_opinion");
@@ -514,7 +519,7 @@ class CustomAJAXChat extends AJAXChat {
 			case '/close_round':
 				$this->insertChatBotMessageInAllChannels("/restart_clock");
 				$this->insertChatBotMessageInAllChannels("/start_opinion");
-				$this->insertChatBotMessageInAllChannels($this->getLang("closePhaseMesssage"));
+				$this->insertChatBotMessageInAllChannels($this->getLang("closePhaseMessage"));
 				return true;
 			break;
 			case '/init_game':
