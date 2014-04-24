@@ -545,6 +545,7 @@ class CustomAJAXChat extends AJAXChat {
 				$pairCombinator = new PairHandler($this->db);
 				$pairCombinator->saveAndReset();
 				$this->insertChatBotMessageInAllChannels("/close_experiment");
+				$this->insertChatBotMessage($this->getPrivateMessageID(),"Los usuarios fueron redirigidos a end.html");
 				return true;
 
 		}

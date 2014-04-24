@@ -39,7 +39,7 @@ ajaxChat.replaceCustomCommands = function(text, textParts) {
 		break;
 
 		case '/close_experiment':
-			ajaxChat.goToExitScreen();
+			if(this.userRole !== '2' && this.userRole !== '3')  ajaxChat.goToExitScreen();
 			return false;
 		break;
 
@@ -52,7 +52,8 @@ ajaxChat.replaceCustomCommands = function(text, textParts) {
 
 ajaxChat.goToExitScreen = function()
 {
-	//window.location.replace("end.html");
+	
+		window.location.replace("end.html");
 }
 
 ajaxChat.replaceCommandRound = function(textParts) {
