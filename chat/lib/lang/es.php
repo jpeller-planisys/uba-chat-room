@@ -9,12 +9,13 @@
  */
 
 $lang = array();
-$lang['askInitialOpinionMessage'] = "Este es el texto que se muestra al pedir una opinión inicial";
-$lang["redirectedToEndMessage"] = "Los usuarios fueron redirigidos a end.html";
-$lang["initGameOkGeneralMessage"] = "Este es el canal público del experimento. Lanzaremos chats aleatorios entre ustedes. Etc. El experimento está a punto de comenzar.";
+$lang['askInitialOpinionMessage'] = "Se ha habilitado la barra de opinión. Por favor, marque cuán de acuerdo o en desacuerdo se siente con respecto a la propuesta";
+$lang["initGameOkGeneralMessage"] = "¡Bienvenidos al experimento! En unos momentos les pediremos que nos den su opinión inicial sobre la propuesta. Luego, lanzaremos diferentes rondas de chats tras las cuales podrán modificar su posición original.";
 $lang["roundStartMessage"] = "Comenzó un nuevo round de chats! Tienen 5 minutos para discutir";
-$lang["lastRoundEndedMessage"] = "El experimento termino";
-$lang["pairsCalculatedNotifyModeratorMessage"] = "Los rounds ya están calculados. Pueden comenzar las rondas!";
+$lang["lastRoundEndedMessage"] = "Las rondas de chat terminaron. En breve serán redirigidos a la pantalla de finalización. Por favor, aguarden.";
+
+$lang["redirectedToEndMessage"] = "(Aviso) Los usuarios fueron redirigidos a la pantalla de finalización. El experimento terminó.";
+$lang["pairsCalculatedNotifyModeratorMessage"] = " (Aviso) Los rounds fueron calculados correctamente. Ya puede comenzar a lanzar las rondas de chat.";
 
 
 $lang['title'] = 'Chat-room @ UBA';
