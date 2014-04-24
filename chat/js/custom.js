@@ -167,17 +167,27 @@ ajaxChat.getUserNodeStringItems =  function(encodedUserName, userID, isInline) {
 		{
 			menu 	= '';
 			if(this.userRole === '2' || this.userRole === '3') { //admin y moderadores
-				menu	+= '<li><a href="javascript:ajaxChat.sendMessageWrapper(\'/init_game\');">Calcular rondas de chat</a></li>';
-				menu	+= '<li><a href="javascript:ajaxChat.sendMessageWrapper(\'/round\');">Avanzar un paso</a></li>';
-				menu	+= '<li><a href="javascript:ajaxChat.sendMessageWrapper(\'/close_round\');">Pedir opinion (y avisar fin de ronda)</a></li>';
-				menu	+= '<li><a href="javascript:ajaxChat.sendMessageWrapper(\'/ask_initial_opinion\');">Pedir opinion inicial</a></li>';
-				menu	+= '<li><a href="javascript:ajaxChat.sendMessageWrapper(\'/start_opinion\');">Permitir opinar</a></li>';
-				menu	+= '<li><a href="javascript:ajaxChat.sendMessageWrapper(\'/end_opinion\');">No permitir opinar</a></li>';
-				menu	+= '<li><a href="javascript:ajaxChat.sendMessageWrapper(\'/close_chatbox\');">Cerrar Chatbox</a></li>';
-				menu	+= '<li><a href="javascript:ajaxChat.sendMessageWrapper(\'/open_chatbox\');">Abrir Chatbox</a></li>';
+				menu	+= '<li>---------------------</li>';
+				menu	+= '<li>Inicialización</li>';
+				menu	+= '<li><a href="javascript:ajaxChat.sendMessageWrapper(\'/init_game\');">1) Calcular rondas de chat</a></li>';
+				menu	+= '<li><a href="javascript:ajaxChat.sendMessageWrapper(\'/ask_initial_opinion\');">2) Pedir opinion inicial</a></li>';
+				menu	+= '<li>---------------------</li>';
+				menu	+= '<li>Rondas</li>';
+				menu	+= '<li><a href="javascript:ajaxChat.sendMessageWrapper(\'/round\');">3 a) Avanzar un paso</a></li>';
+				menu	+= '<li><a href="javascript:ajaxChat.sendMessageWrapper(\'/close_round\');">3 b) Pedir opinion <br />(y avisar fin de ronda)</a></li>';
+				menu	+= '<li>---------------------</li>';
+				menu	+= '<li>Barra de opinión</li>';
+				menu	+= '<li><a href="javascript:ajaxChat.sendMessageWrapper(\'/start_opinion\');">Habilitar</a></li>';
+				menu	+= '<li><a href="javascript:ajaxChat.sendMessageWrapper(\'/end_opinion\');">Deshabilitar</a></li>';
+				menu	+= '<li>---------------------</li>';
+				menu	+= '<li>Chatbox</li>';
+				menu	+= '<li><a href="javascript:ajaxChat.sendMessageWrapper(\'/open_chatbox\');">Habilitar</a></li>';
+				menu	+= '<li><a href="javascript:ajaxChat.sendMessageWrapper(\'/close_chatbox\');">Deshabilitar</a></li>';
+				menu	+= '<li>---------------------</li>';
+				menu	+= '<li>Cierre</li>';
 				menu	+= '<li><a href="javascript:ajaxChat.sendMessageWrapper(\'/restart_clock\');">Reiniciar clock</a></li>';
 				menu	+= '<li><a href="javascript:ajaxChat.sendMessageWrapper(\'/close_experiment\');">Redirigir a pantalla de finalización</a></li>';
-				menu	+= '<li><a href="javascript:ajaxChat.sendMessageWrapper(\'/close_experiment\');">Redirigir a pantalla de finalización</a></li>';
+				menu	+= '<li><a href="javascript:ajaxChat.sendMessageWrapper(\'/empty_messages\');">Borrar todo</a></li>';
 
 				
 
