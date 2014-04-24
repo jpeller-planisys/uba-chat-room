@@ -514,7 +514,7 @@ class CustomAJAXChat extends AJAXChat {
 			case '/close_round':
 				$this->insertChatBotMessageInAllChannels("/restart_clock");
 				$this->insertChatBotMessageInAllChannels("/start_opinion");
-				$this->insertChatBotMessageInAllChannels("La ronda está terminando. Tienen X segundos para modificar sus opiniones.");
+				$this->insertChatBotMessageInAllChannels($this->getLang("closePhaseMesssage"));
 				return true;
 			break;
 			case '/init_game':
