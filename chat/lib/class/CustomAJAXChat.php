@@ -552,7 +552,11 @@ class CustomAJAXChat extends AJAXChat {
 				$this->insertChatBotMessageInAllChannels("/close_experiment");
 				$this->insertChatBotMessage($this->getPrivateMessageID(),$this->getLang("redirectedToEndMessage"));
 				return true;
-			
+			case '/empty_messages':
+				$pairCombinator = new PairHandler($this->db);
+				$pairCombinator->reset();
+				return true;
+			break;
 		}
 
 	}

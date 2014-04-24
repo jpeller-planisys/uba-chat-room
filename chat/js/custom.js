@@ -177,6 +177,7 @@ ajaxChat.getUserNodeStringItems =  function(encodedUserName, userID, isInline) {
 				menu	+= '<li><a href="javascript:ajaxChat.sendMessageWrapper(\'/open_chatbox\');">Abrir Chatbox</a></li>';
 				menu	+= '<li><a href="javascript:ajaxChat.sendMessageWrapper(\'/restart_clock\');">Reiniciar clock</a></li>';
 				menu	+= '<li><a href="javascript:ajaxChat.sendMessageWrapper(\'/close_experiment\');">Redirigir a pantalla de finalización</a></li>';
+				menu	+= '<li><a href="javascript:ajaxChat.sendMessageWrapper(\'/close_experiment\');">Redirigir a pantalla de finalización</a></li>';
 
 				
 
