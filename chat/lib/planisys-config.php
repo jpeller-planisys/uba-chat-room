@@ -20,11 +20,11 @@ $config = array();
 // Database connection values:
 $config['dbConnection'] = array();
 // Database hostname:
-$config['dbConnection']['host'] = 'localhost';
+$config['dbConnection']['host'] = 'locaxx';
 // Database username:
 $config['dbConnection']['user'] = 'root';
 // Database password:
-$config['dbConnection']['pass'] = 'redusers9031';
+$config['dbConnection']['pass'] = 'x';
 // Database name:
 $config['dbConnection']['name'] = 'chat';
 // Database type:
